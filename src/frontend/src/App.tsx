@@ -26,7 +26,9 @@ import {
   Menu,
   MessageSquare,
   Phone,
+  TrendingUp,
   Users,
+  Wrench,
   X,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
@@ -44,22 +46,29 @@ const TECHNICAL_SKILLS = [
   {
     category: "Data Analytics Tools",
     icon: <BarChart3 className="w-4 h-4" />,
-    skills: ["Microsoft Excel (Advanced)", "Power BI", "Tableau"],
+    skills: ["Microsoft Excel (Advanced)", "Power BI"],
+    accent: "primary" as const,
   },
   {
     category: "Programming & Query Languages",
     icon: <Code2 className="w-4 h-4" />,
-    skills: ["Python", "NumPy", "Pandas", "Matplotlib", "SQL"],
-  },
-  {
-    category: "Web & Core Programming",
-    icon: <Code2 className="w-4 h-4" />,
-    skills: ["C", "C++", "HTML", "CSS", "JavaScript"],
+    skills: [
+      "Python (NumPy, Pandas, Matplotlib)",
+      "SQL",
+      "— Web & Core Programming —",
+      "C",
+      "C++",
+      "HTML",
+      "CSS",
+      "JavaScript",
+    ],
+    accent: "teal" as const,
   },
   {
     category: "Database Skills",
     icon: <Database className="w-4 h-4" />,
     skills: ["MySQL", "Database Design", "ER Diagrams"],
+    accent: "primary" as const,
   },
   {
     category: "Other Skills",
@@ -70,6 +79,7 @@ const TECHNICAL_SKILLS = [
       "Statistical Analysis",
       "Reporting",
     ],
+    accent: "amber" as const,
   },
 ];
 
@@ -79,6 +89,12 @@ const SOFT_SKILLS = [
   { label: "Time Management", icon: Clock },
   { label: "Strong Communication", icon: MessageSquare },
   { label: "Team Collaboration", icon: Users },
+];
+
+const STATS = [
+  { stat: "85%+", label: "Academic Score" },
+  { stat: "6+", label: "Projects Built" },
+  { stat: "5+", label: "Tools Mastered" },
 ];
 
 const EXCEL_PROJECTS = [
@@ -197,10 +213,12 @@ function RippleSection({
   children,
   className,
   id,
+  style,
 }: {
   children: React.ReactNode;
   className?: string;
   id?: string;
+  style?: React.CSSProperties;
 }) {
   const { ripples, trigger } = useRipple();
 
@@ -212,12 +230,22 @@ function RippleSection({
     <section
       id={id}
       className={className}
+      style={style}
       onClick={handleClick}
       onKeyUp={() => {}}
     >
       <RippleLayer ripples={ripples} />
       {children}
     </section>
+  );
+}
+
+// ── Section Label ─────────────────────────────────────────────────────────────
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-card text-xs font-semibold tracking-[0.18em] uppercase text-muted-foreground mb-4">
+      {children}
+    </span>
   );
 }
 
@@ -247,15 +275,17 @@ function Navbar() {
       }`}
     >
       <nav className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+        {/* Logo */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="font-display font-bold text-xl text-primary"
+          className="font-display font-extrabold text-2xl tracking-tight"
         >
-          TV
+          <span className="text-primary">TV</span>
           <span className="text-foreground">.</span>
         </motion.div>
 
+        {/* Desktop nav */}
         <motion.ul
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -269,7 +299,7 @@ function Navbar() {
                 data-ocid="nav.link"
                 whileTap={{ scale: 0.93 }}
                 onClick={() => handleNav(link.href)}
-                className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-muted/50 active:bg-primary/20"
+                className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-full hover:bg-muted/40 active:bg-primary/15"
               >
                 {link.label}
               </motion.button>
@@ -277,6 +307,7 @@ function Navbar() {
           ))}
         </motion.ul>
 
+        {/* Right icons */}
         <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -288,7 +319,7 @@ function Navbar() {
             target="_blank"
             rel="noopener noreferrer"
             data-ocid="nav.link"
-            className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+            className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-all"
             aria-label="GitHub"
           >
             <Github className="w-5 h-5" />
@@ -296,7 +327,7 @@ function Navbar() {
           <a
             href="mailto:tusharvala707@gmail.com"
             data-ocid="nav.link"
-            className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+            className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-all"
             aria-label="Email"
           >
             <Mail className="w-5 h-5" />
@@ -304,7 +335,7 @@ function Navbar() {
           <a
             href="tel:+918320808750"
             data-ocid="nav.link"
-            className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+            className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-all"
             aria-label="Phone"
           >
             <Phone className="w-5 h-5" />
@@ -341,33 +372,33 @@ function Navbar() {
                     data-ocid="nav.link"
                     whileTap={{ scale: 0.95 }}
                     onClick={() => handleNav(link.href)}
-                    className="w-full text-left px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-md transition-colors active:bg-primary/20"
+                    className="w-full text-left px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/40 rounded-full transition-colors active:bg-primary/15"
                   >
                     {link.label}
                   </motion.button>
                 </li>
               ))}
             </ul>
-            <div className="px-6 pb-4 flex items-center gap-3">
+            <div className="px-6 pb-4 flex items-center gap-2">
               <a
                 href="https://github.com/tushar123851"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+                className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-all"
                 aria-label="GitHub"
               >
                 <Github className="w-5 h-5" />
               </a>
               <a
                 href="mailto:tusharvala707@gmail.com"
-                className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+                className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-all"
                 aria-label="Email"
               >
                 <Mail className="w-5 h-5" />
               </a>
               <a
                 href="tel:+918320808750"
-                className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+                className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-all"
                 aria-label="Phone"
               >
                 <Phone className="w-5 h-5" />
@@ -380,7 +411,7 @@ function Navbar() {
   );
 }
 
-// ── Hero ─────────────────────────────────────────────────────────────────────
+// ── Hero ──────────────────────────────────────────────────────────────────────
 function HeroSection() {
   const { ripples, trigger } = useRipple();
 
@@ -393,20 +424,22 @@ function HeroSection() {
     >
       <RippleLayer ripples={ripples} />
 
+      {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: "url('/assets/uploads/image-1.png')" }}
       />
-      <div className="absolute inset-0 bg-background/70" />
-      <div className="absolute inset-0 grid-bg opacity-40" />
+      <div className="absolute inset-0 bg-background/75" />
+      <div className="absolute inset-0 grid-bg opacity-30" />
 
+      {/* Ambient glow blobs */}
       <div
-        className="absolute top-1/3 left-1/4 w-96 h-96 rounded-full blur-[120px] opacity-15"
-        style={{ background: "oklch(0.62 0.2 240)" }}
+        className="absolute top-1/3 left-1/4 w-[500px] h-[500px] rounded-full blur-[130px] opacity-[0.12] pointer-events-none"
+        style={{ background: "oklch(0.60 0.22 245)" }}
       />
       <div
-        className="absolute bottom-1/3 right-1/4 w-72 h-72 rounded-full blur-[100px] opacity-10"
-        style={{ background: "oklch(0.72 0.18 200)" }}
+        className="absolute bottom-1/3 right-1/4 w-[380px] h-[380px] rounded-full blur-[110px] opacity-[0.09] pointer-events-none"
+        style={{ background: "oklch(0.68 0.16 195)" }}
       />
 
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
@@ -415,22 +448,35 @@ function HeroSection() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <p className="text-accent text-sm font-semibold tracking-[0.25em] uppercase mb-4">
-            Welcome to my portfolio
-          </p>
-          <p className="font-display font-extrabold text-5xl md:text-6xl lg:text-7xl text-primary mb-3 tracking-tight">
-            Data Analyst
-          </p>
+          {/* DATA ANALYST pill badge */}
+          <motion.div
+            initial={{ opacity: 0, y: -16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1, duration: 0.6 }}
+            className="flex justify-center mb-6"
+          >
+            <span className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-primary/40 bg-primary/10 text-primary font-bold text-sm tracking-[0.22em] uppercase backdrop-blur-sm">
+              <TrendingUp className="w-4 h-4" />
+              Data Analyst
+            </span>
+          </motion.div>
+
+          {/* Name */}
           <h1
-            className="font-display font-bold text-4xl md:text-6xl lg:text-7xl mb-6"
+            className="font-display font-extrabold text-6xl md:text-7xl lg:text-8xl mb-4 leading-none tracking-tight"
             style={{ color: "#ffffff" }}
           >
             Tushar <span style={{ color: "#ffffff" }}>Vala</span>
           </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground font-medium mb-10">
-            Python <span className="text-border mx-2">·</span> Power BI{" "}
-            <span className="text-border mx-2">·</span> Excel
+
+          {/* Subtitle */}
+          <p className="text-lg md:text-xl text-muted-foreground font-medium mb-10 tracking-wide">
+            Python <span className="text-border mx-2">·</span>
+            Power BI <span className="text-border mx-2">·</span>
+            Excel
           </p>
+
+          {/* CTAs */}
           <div className="flex flex-wrap gap-4 justify-center">
             <Button
               data-ocid="hero.primary_button"
@@ -446,7 +492,7 @@ function HeroSection() {
               <ExternalLink className="ml-2 w-4 h-4" />
             </Button>
             <Button
-              data-ocid="hero.resume_button"
+              data-ocid="hero.secondary_button"
               size="lg"
               variant="outline"
               className="font-semibold px-8 border-primary/50 text-primary hover:bg-primary/10"
@@ -463,11 +509,12 @@ function HeroSection() {
           </div>
         </motion.div>
 
+        {/* Scroll cue */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.5, duration: 1 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          transition={{ delay: 1.6, duration: 1 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2"
         >
           <ChevronDown className="w-6 h-6 text-muted-foreground animate-bounce" />
         </motion.div>
@@ -476,22 +523,23 @@ function HeroSection() {
   );
 }
 
-// ── About ─────────────────────────────────────────────────────────────────────
+// ── About ──────────────────────────────────────────────────────────────────────
 function AboutSection() {
   return (
-    <RippleSection id="about" className="py-12 px-6">
+    <RippleSection id="about" className="py-20 px-6">
       <div className="max-w-5xl mx-auto">
         <motion.div
           variants={stagger}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
+          viewport={{ once: true, amount: 0.15 }}
         >
-          <motion.div variants={fadeUp} className="mb-8">
-            <p className="text-accent text-sm font-semibold tracking-widest uppercase mb-3">
-              About Me
-            </p>
-            <h2 className="font-display font-bold text-4xl md:text-5xl mb-6">
+          <motion.div variants={fadeUp} className="mb-10">
+            <SectionLabel>About Me</SectionLabel>
+            <h2
+              className="font-display font-bold text-4xl md:text-5xl mb-5"
+              style={{ color: "#ffffff" }}
+            >
               Education & <span className="text-primary">Background</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl leading-relaxed">
@@ -503,12 +551,14 @@ function AboutSection() {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-6">
+          {/* Education cards */}
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
             <motion.div variants={fadeUp}>
-              <Card className="h-full border-border hover:border-primary/40 transition-colors glow-sm group">
+              <Card className="h-full border-border hover:border-primary/50 transition-colors group overflow-hidden">
+                <div className="h-1 w-full bg-primary/80" />
                 <CardHeader>
                   <div className="flex items-start gap-4">
-                    <div className="p-3 rounded-xl bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
+                    <div className="p-3 rounded-xl bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors shrink-0">
                       <GraduationCap className="w-6 h-6" />
                     </div>
                     <div>
@@ -522,20 +572,19 @@ function AboutSection() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex items-center gap-2">
-                    <Badge className="bg-primary/15 text-primary hover:bg-primary/25 border-0">
-                      Average: 85.13%
-                    </Badge>
-                  </div>
+                  <Badge className="bg-primary/15 text-primary hover:bg-primary/25 border-0 rounded-full font-semibold">
+                    Average: 85.13%
+                  </Badge>
                 </CardContent>
               </Card>
             </motion.div>
 
             <motion.div variants={fadeUp}>
-              <Card className="h-full border-border hover:border-accent/40 transition-colors group">
+              <Card className="h-full border-border hover:border-accent/50 transition-colors group overflow-hidden">
+                <div className="h-1 w-full bg-accent/80" />
                 <CardHeader>
                   <div className="flex items-start gap-4">
-                    <div className="p-3 rounded-xl bg-accent/10 text-accent group-hover:bg-accent/20 transition-colors">
+                    <div className="p-3 rounded-xl bg-accent/10 text-accent group-hover:bg-accent/20 transition-colors shrink-0">
                       <GraduationCap className="w-6 h-6" />
                     </div>
                     <div>
@@ -549,15 +598,36 @@ function AboutSection() {
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex items-center gap-2">
-                    <Badge className="bg-accent/15 text-accent hover:bg-accent/25 border-0">
-                      Score: 93.71%
-                    </Badge>
-                  </div>
+                  <Badge className="bg-accent/15 text-accent hover:bg-accent/25 border-0 rounded-full font-semibold">
+                    Average: 93.56%
+                  </Badge>
                 </CardContent>
               </Card>
             </motion.div>
           </div>
+
+          {/* Stats strip */}
+          <motion.div variants={fadeUp}>
+            <div className="grid grid-cols-3 divide-x divide-border border border-border rounded-xl overflow-hidden">
+              {STATS.map((s, i) => (
+                <div
+                  key={s.label}
+                  data-ocid={`about.stat.item.${i + 1}`}
+                  className="flex flex-col items-center justify-center py-6 px-4 bg-card hover:bg-muted/20 transition-colors"
+                >
+                  <span
+                    className="font-display font-extrabold text-3xl md:text-4xl"
+                    style={{ color: "oklch(0.75 0.17 70)" }}
+                  >
+                    {s.stat}
+                  </span>
+                  <span className="text-xs text-muted-foreground font-medium uppercase tracking-widest mt-1 text-center">
+                    {s.label}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
         </motion.div>
       </div>
     </RippleSection>
@@ -597,9 +667,9 @@ function SoftSkillCard({
               ? {
                   scale: [1, 1.22, 1],
                   boxShadow: [
-                    "0 0 0px oklch(0.62 0.2 240 / 0)",
-                    "0 0 32px 8px oklch(0.62 0.2 240 / 0.7)",
-                    "0 0 16px 4px oklch(0.62 0.2 240 / 0.3)",
+                    "0 0 0px oklch(0.60 0.22 245 / 0)",
+                    "0 0 32px 8px oklch(0.60 0.22 245 / 0.7)",
+                    "0 0 16px 4px oklch(0.60 0.22 245 / 0.3)",
                   ],
                 }
               : { scale: 1 }
@@ -608,8 +678,8 @@ function SoftSkillCard({
           className="relative z-10 w-16 h-16 rounded-2xl bg-primary/15 border border-primary/30 flex items-center justify-center text-primary hover:bg-primary/25 hover:border-primary/60 transition-colors"
           style={{
             boxShadow: active
-              ? "0 0 24px 6px oklch(0.62 0.2 240 / 0.45)"
-              : "0 0 12px 2px oklch(0.62 0.2 240 / 0.15)",
+              ? "0 0 24px 6px oklch(0.60 0.22 245 / 0.45)"
+              : "0 0 12px 2px oklch(0.60 0.22 245 / 0.15)",
           }}
         >
           <Icon className="w-7 h-7" />
@@ -619,8 +689,8 @@ function SoftSkillCard({
       <motion.span
         animate={
           active
-            ? { color: "oklch(0.62 0.2 240)", fontWeight: 700 }
-            : { color: "oklch(0.6 0.04 250)" }
+            ? { color: "oklch(0.60 0.22 245)", fontWeight: 700 }
+            : { color: "oklch(0.55 0.05 250)" }
         }
         transition={{ duration: 0.3 }}
         className="text-sm font-medium text-center leading-tight"
@@ -631,10 +701,146 @@ function SoftSkillCard({
   );
 }
 
-// ── Skills ────────────────────────────────────────────────────────────────────
-function SkillsSection() {
+// ── Tech Skill Card ───────────────────────────────────────────────────────────
+type AccentKey = "primary" | "teal" | "amber";
+
+function TechSkillCard({
+  group,
+  index,
+  accentClass,
+  badgeHover,
+  separatorLabel,
+}: {
+  group: (typeof TECHNICAL_SKILLS)[0];
+  index: number;
+  accentClass: Record<AccentKey, string>;
+  badgeHover: Record<AccentKey, string>;
+  separatorLabel: Record<AccentKey, string>;
+}) {
+  const [active, setActive] = useState(false);
+
+  const glowColor: Record<AccentKey, string> = {
+    primary: "oklch(0.60 0.22 245 / 0.55)",
+    teal: "oklch(0.68 0.16 195 / 0.55)",
+    amber: "oklch(0.75 0.17 70 / 0.55)",
+  };
+
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setActive(true);
+    setTimeout(() => setActive(false), 700);
+  };
+
+  const isProgramming = group.category === "Programming & Query Languages";
+
   return (
-    <RippleSection id="skills" className="py-12 px-6 bg-muted/20">
+    <motion.div
+      variants={fadeUp}
+      onClick={handleClick}
+      className="cursor-pointer select-none"
+      animate={
+        active
+          ? {
+              scale: [1, 1.03, 1],
+              boxShadow: [
+                "0 0 0px transparent",
+                `0 0 32px 8px ${glowColor[group.accent]}`,
+                `0 0 16px 4px ${glowColor[group.accent].replace("0.55", "0.2")}`,
+              ],
+            }
+          : { scale: 1, boxShadow: "0 0 0px transparent" }
+      }
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      style={{ borderRadius: "0.75rem" }}
+    >
+      <Card
+        data-ocid={`skills.tech.item.${index}`}
+        className={`h-full border-border hover:border-primary/30 transition-colors rounded-xl ${
+          accentClass[group.accent]
+        } rounded-l-none`}
+      >
+        <CardHeader className="pb-3">
+          <div
+            className={`flex items-center gap-2 ${
+              group.accent === "primary"
+                ? "text-primary"
+                : group.accent === "teal"
+                  ? "text-accent"
+                  : "text-yellow-400"
+            }`}
+          >
+            {group.icon}
+            <CardTitle className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+              {group.category}
+            </CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-wrap gap-2">
+            {group.skills.map((skill) =>
+              skill.startsWith("—") ? (
+                <div key={skill} className="w-full mt-1 mb-0.5">
+                  <span
+                    className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${
+                      separatorLabel[group.accent]
+                    }`}
+                  >
+                    {skill.replace(/^— | —$/g, "")}
+                  </span>
+                </div>
+              ) : isProgramming ? (
+                <Badge
+                  key={skill}
+                  variant="outline"
+                  className="text-xs font-medium cursor-default bg-white text-black border-gray-200 hover:bg-gray-100"
+                >
+                  {skill}
+                </Badge>
+              ) : (
+                <Badge
+                  key={skill}
+                  variant="outline"
+                  className={`text-xs font-medium cursor-default transition-colors ${badgeHover[group.accent]}`}
+                >
+                  {skill}
+                </Badge>
+              ),
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    </motion.div>
+  );
+}
+
+// ── Skills ─────────────────────────────────────────────────────────────────────
+function SkillsSection() {
+  const accentClass: Record<AccentKey, string> = {
+    primary: "card-accent-primary",
+    teal: "card-accent-teal",
+    amber: "card-accent-amber",
+  };
+
+  const badgeHover: Record<AccentKey, string> = {
+    primary:
+      "hover:bg-primary/20 hover:text-primary border-primary/20 text-primary/80",
+    teal: "hover:bg-accent/20 hover:text-accent border-accent/20 text-accent/80",
+    amber:
+      "hover:bg-yellow-500/20 hover:text-yellow-400 border-yellow-500/20 text-yellow-400/80",
+  };
+
+  const separatorLabel: Record<AccentKey, string> = {
+    teal: "bg-accent/10 text-accent border-accent/30",
+    primary: "bg-primary/10 text-primary border-primary/30",
+    amber: "bg-yellow-500/10 text-yellow-400 border-yellow-500/30",
+  };
+
+  return (
+    <RippleSection
+      id="skills"
+      className="py-20 px-6"
+      style={{ background: "oklch(0.10 0.028 257)" } as React.CSSProperties}
+    >
       <div className="max-w-5xl mx-auto">
         <motion.div
           variants={stagger}
@@ -642,54 +848,40 @@ function SkillsSection() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
         >
-          <motion.div variants={fadeUp} className="mb-8">
-            <p className="text-accent text-sm font-semibold tracking-widest uppercase mb-3">
-              What I Know
-            </p>
-            <h2 className="font-display font-bold text-4xl md:text-5xl">
+          <motion.div variants={fadeUp} className="mb-10">
+            <SectionLabel>What I Know</SectionLabel>
+            <h2
+              className="font-display font-bold text-4xl md:text-5xl"
+              style={{ color: "#ffffff" }}
+            >
               Technical <span className="text-primary">Skills</span>
             </h2>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {TECHNICAL_SKILLS.map((group) => (
-              <motion.div key={group.category} variants={fadeUp}>
-                <Card className="h-full border-border hover:border-primary/30 transition-colors">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center gap-2 text-primary">
-                      {group.icon}
-                      <CardTitle className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-                        {group.category}
-                      </CardTitle>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-wrap gap-2">
-                      {group.skills.map((skill) => (
-                        <Badge
-                          key={skill}
-                          variant="secondary"
-                          className="text-xs font-medium hover:bg-primary/20 hover:text-primary transition-colors cursor-default"
-                        >
-                          {skill}
-                        </Badge>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
+          {/* Technical skill cards with left-accent borders */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-5 mb-10">
+            {TECHNICAL_SKILLS.map((group, i) => (
+              <TechSkillCard
+                key={group.category}
+                group={group}
+                index={i + 1}
+                accentClass={accentClass}
+                badgeHover={badgeHover}
+                separatorLabel={separatorLabel}
+              />
             ))}
           </div>
 
+          {/* Soft skills */}
           <motion.div variants={fadeUp}>
             <Card className="border-border overflow-hidden">
               <CardHeader className="pb-4">
                 <div className="flex items-center gap-2">
                   <Brain className="w-4 h-4 text-accent" />
-                  <CardTitle className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+                  <CardTitle className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
                     Soft Skills
                   </CardTitle>
-                  <span className="text-xs text-muted-foreground/60 ml-1">
+                  <span className="text-xs text-muted-foreground/50 ml-1">
                     — click to interact
                   </span>
                 </div>
@@ -717,21 +909,43 @@ function SkillsSection() {
 function ProjectCard({
   project,
   index,
+  accent,
 }: {
   project: (typeof EXCEL_PROJECTS)[0];
   index: number;
+  accent: "primary" | "teal" | "amber";
 }) {
+  const topBorder = {
+    primary: "card-top-primary",
+    teal: "card-top-teal",
+    amber: "card-top-amber",
+  };
+
+  const iconBg = {
+    primary: "bg-primary/10 text-primary",
+    teal: "bg-accent/10 text-accent",
+    amber: "bg-yellow-500/10 text-yellow-400",
+  };
+
+  const titleHover = {
+    primary: "group-hover:text-primary",
+    teal: "group-hover:text-accent",
+    amber: "group-hover:text-yellow-400",
+  };
+
   return (
     <Card
       data-ocid={`projects.item.${index}`}
-      className="flex flex-col h-full border-border hover:border-primary/40 transition-all duration-300 hover:-translate-y-1 group"
+      className={`flex flex-col h-full border-border hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 group overflow-hidden ${topBorder[accent]}`}
     >
       <CardHeader>
         <div className="flex items-start justify-between gap-2">
-          <CardTitle className="font-display text-xl group-hover:text-primary transition-colors">
+          <CardTitle
+            className={`font-display text-xl transition-colors ${titleHover[accent]}`}
+          >
             {project.title}
           </CardTitle>
-          <div className="p-2 rounded-lg bg-primary/10 text-primary shrink-0">
+          <div className={`p-2 rounded-lg shrink-0 ${iconBg[accent]}`}>
             <BarChart3 className="w-5 h-5" />
           </div>
         </div>
@@ -778,7 +992,7 @@ function ProjectCard({
 // ── Projects ──────────────────────────────────────────────────────────────────
 function ProjectsSection() {
   return (
-    <RippleSection id="projects" className="py-12 px-6">
+    <RippleSection id="projects" className="py-20 px-6">
       <div className="max-w-5xl mx-auto">
         <motion.div
           variants={stagger}
@@ -786,36 +1000,38 @@ function ProjectsSection() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
         >
-          <motion.div variants={fadeUp} className="mb-8">
-            <p className="text-accent text-sm font-semibold tracking-widest uppercase mb-3">
-              My Work
-            </p>
-            <h2 className="font-display font-bold text-4xl md:text-5xl">
+          <motion.div variants={fadeUp} className="mb-10">
+            <SectionLabel>My Work</SectionLabel>
+            <h2
+              className="font-display font-bold text-4xl md:text-5xl"
+              style={{ color: "#ffffff" }}
+            >
               Featured <span className="text-primary">Projects</span>
             </h2>
           </motion.div>
 
           <motion.div variants={fadeUp}>
             <Tabs defaultValue="excel">
-              <TabsList className="mb-8 bg-muted/50 border border-border p-1 h-auto flex-wrap">
+              <TabsList className="mb-8 bg-card border border-border p-1 h-auto gap-1 rounded-xl">
                 <TabsTrigger
                   data-ocid="projects.tab"
                   value="excel"
-                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-semibold px-6 py-2"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-none font-semibold px-5 py-2 rounded-lg transition-all"
                 >
-                  📊 Excel Projects
+                  📊 Excel
                 </TabsTrigger>
                 <TabsTrigger
                   data-ocid="projects.tab"
                   value="powerbi"
-                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-semibold px-6 py-2"
+                  className="data-[state=active]:bg-accent data-[state=active]:text-accent-foreground data-[state=active]:shadow-none font-semibold px-5 py-2 rounded-lg transition-all"
                 >
-                  📈 Power BI Projects
+                  📈 Power BI
                 </TabsTrigger>
                 <TabsTrigger
                   data-ocid="projects.tab"
                   value="dataprep"
-                  className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-semibold px-6 py-2"
+                  className="data-[state=active]:shadow-none font-semibold px-5 py-2 rounded-lg transition-all"
+                  style={{}}
                 >
                   🔧 Data Preprocessing
                 </TabsTrigger>
@@ -829,7 +1045,12 @@ function ProjectsSection() {
                   className="grid md:grid-cols-2 gap-6"
                 >
                   {EXCEL_PROJECTS.map((p, i) => (
-                    <ProjectCard key={p.title} project={p} index={i + 1} />
+                    <ProjectCard
+                      key={p.title}
+                      project={p}
+                      index={i + 1}
+                      accent="primary"
+                    />
                   ))}
                 </motion.div>
               </TabsContent>
@@ -842,7 +1063,12 @@ function ProjectsSection() {
                   className="grid md:grid-cols-2 gap-6"
                 >
                   {POWERBI_PROJECTS.map((p, i) => (
-                    <ProjectCard key={p.title} project={p} index={i + 1} />
+                    <ProjectCard
+                      key={p.title}
+                      project={p}
+                      index={i + 1}
+                      accent="teal"
+                    />
                   ))}
                 </motion.div>
               </TabsContent>
@@ -855,7 +1081,12 @@ function ProjectsSection() {
                   className="grid md:grid-cols-2 gap-6"
                 >
                   {DATAPREP_PROJECTS.map((p, i) => (
-                    <ProjectCard key={p.title} project={p} index={i + 1} />
+                    <ProjectCard
+                      key={p.title}
+                      project={p}
+                      index={i + 1}
+                      accent="amber"
+                    />
                   ))}
                 </motion.div>
               </TabsContent>
@@ -867,63 +1098,205 @@ function ProjectsSection() {
   );
 }
 
-// ── Contact ───────────────────────────────────────────────────────────────────
+// ── Contact Card ──────────────────────────────────────────────────────────────
+function ContactCard({
+  href,
+  icon: Icon,
+  label,
+  value,
+  description,
+  accentColor,
+  ocid,
+}: {
+  href: string;
+  icon: React.ElementType;
+  label: string;
+  value: string;
+  description: string;
+  accentColor: "primary" | "accent";
+  ocid: string;
+}) {
+  const [hovered, setHovered] = useState(false);
+
+  const glowColor =
+    accentColor === "primary"
+      ? "oklch(0.60 0.22 245 / 0.3)"
+      : "oklch(0.68 0.16 195 / 0.3)";
+
+  const borderColor =
+    accentColor === "primary"
+      ? "oklch(0.60 0.22 245 / 0.6)"
+      : "oklch(0.68 0.16 195 / 0.6)";
+
+  const iconBg =
+    accentColor === "primary"
+      ? "bg-primary/15 text-primary"
+      : "bg-accent/15 text-accent";
+
+  return (
+    <motion.a
+      href={href}
+      data-ocid={ocid}
+      whileHover={{ scale: 1.03, y: -6 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ type: "spring", stiffness: 300, damping: 22 }}
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      className="relative flex flex-col items-center text-center p-10 rounded-2xl border bg-card cursor-pointer no-underline block"
+      style={{
+        borderColor: hovered ? borderColor : "oklch(0.22 0.045 255)",
+        boxShadow: hovered
+          ? `0 0 40px 8px ${glowColor}, 0 8px 32px 0 oklch(0 0 0 / 0.3)`
+          : "0 2px 16px 0 oklch(0 0 0 / 0.15)",
+        transition: "border-color 0.3s ease, box-shadow 0.3s ease",
+      }}
+    >
+      <motion.div
+        className="absolute inset-0 rounded-2xl pointer-events-none"
+        animate={{
+          opacity: hovered ? 1 : 0,
+          background:
+            accentColor === "primary"
+              ? "radial-gradient(ellipse at 50% 0%, oklch(0.60 0.22 245 / 0.07) 0%, transparent 70%)"
+              : "radial-gradient(ellipse at 50% 0%, oklch(0.68 0.16 195 / 0.07) 0%, transparent 70%)",
+        }}
+        transition={{ duration: 0.3 }}
+      />
+
+      <motion.div
+        animate={{ scale: hovered ? 1.1 : 1 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className={`relative z-10 w-16 h-16 rounded-xl ${iconBg} flex items-center justify-center mb-5`}
+        style={{
+          boxShadow: hovered
+            ? `0 0 24px 6px ${glowColor}`
+            : `0 0 12px 2px ${glowColor.replace("0.3", "0.12")}`,
+        }}
+      >
+        <Icon className="w-8 h-8" />
+      </motion.div>
+
+      <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-2 relative z-10">
+        {label}
+      </p>
+
+      <motion.p
+        animate={{
+          color: hovered
+            ? accentColor === "primary"
+              ? "oklch(0.60 0.22 245)"
+              : "oklch(0.68 0.16 195)"
+            : "oklch(0.95 0.01 250)",
+        }}
+        transition={{ duration: 0.25 }}
+        className="font-display font-bold text-xl md:text-2xl break-all relative z-10 mb-3"
+      >
+        {value}
+      </motion.p>
+
+      <p className="text-sm text-muted-foreground relative z-10 leading-relaxed max-w-xs">
+        {description}
+      </p>
+
+      <motion.div
+        animate={{ opacity: hovered ? 1 : 0, y: hovered ? 0 : 6 }}
+        transition={{ duration: 0.2 }}
+        className="mt-5 relative z-10"
+      >
+        <span
+          className={`text-xs font-semibold uppercase tracking-widest ${
+            accentColor === "primary" ? "text-primary" : "text-accent"
+          }`}
+        >
+          Tap to connect →
+        </span>
+      </motion.div>
+    </motion.a>
+  );
+}
+
+// ── Contact ────────────────────────────────────────────────────────────────────
 function ContactSection() {
   return (
-    <RippleSection id="contact" className="py-12 px-6 bg-muted/20">
-      <div className="max-w-3xl mx-auto">
+    <RippleSection
+      id="contact"
+      className="relative py-24 px-6 overflow-hidden"
+      style={{ background: "oklch(0.10 0.028 257)" } as React.CSSProperties}
+    >
+      <div
+        className="absolute left-1/4 top-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full blur-[150px] opacity-[0.06] pointer-events-none"
+        style={{ background: "oklch(0.60 0.22 245)" }}
+      />
+      <div
+        className="absolute right-1/4 top-1/2 -translate-y-1/2 w-[380px] h-[380px] rounded-full blur-[120px] opacity-[0.05] pointer-events-none"
+        style={{ background: "oklch(0.68 0.16 195)" }}
+      />
+      <div className="absolute inset-0 grid-bg opacity-10 pointer-events-none" />
+
+      <div className="relative max-w-3xl mx-auto">
         <motion.div
           variants={stagger}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
+          viewport={{ once: true, amount: 0.15 }}
         >
-          <motion.div variants={fadeUp} className="mb-8">
-            <p className="text-accent text-sm font-semibold tracking-widest uppercase mb-3">
-              Get In Touch
-            </p>
-            <h2 className="font-display font-bold text-4xl md:text-5xl">
-              Contact <span className="text-primary">Me</span>
+          <motion.div variants={fadeUp} className="mb-4 text-center">
+            <SectionLabel>Get In Touch</SectionLabel>
+            <h2
+              className="font-display font-bold text-4xl md:text-5xl lg:text-6xl mb-5"
+              style={{ color: "#ffffff" }}
+            >
+              Let&apos;s <span className="text-primary">Connect</span>
             </h2>
           </motion.div>
 
-          <motion.div variants={fadeUp} className="space-y-8">
-            <p className="text-muted-foreground text-lg leading-relaxed">
-              I&apos;m always open to new opportunities, collaborations, and
-              interesting data projects. Feel free to reach out!
-            </p>
+          <motion.p
+            variants={fadeUp}
+            className="text-muted-foreground text-lg leading-relaxed text-center max-w-xl mx-auto mb-14"
+          >
+            I&apos;m always open to new opportunities, collaborations, and
+            interesting data projects. Feel free to reach out — I&apos;d love to
+            hear from you!
+          </motion.p>
 
-            <div className="space-y-4">
-              <a
+          <motion.div
+            variants={stagger}
+            className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          >
+            <motion.div variants={fadeUp}>
+              <ContactCard
                 href="mailto:tusharvala707@gmail.com"
-                className="flex items-center gap-4 p-4 rounded-xl border border-border hover:border-primary/40 hover:bg-muted/30 transition-all group"
-              >
-                <div className="p-3 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
-                  <Mail className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
-                    Email
-                  </p>
-                  <p className="font-medium">tusharvala707@gmail.com</p>
-                </div>
-              </a>
+                icon={Mail}
+                label="Email"
+                value="tusharvala707@gmail.com"
+                description="Drop me a message anytime. I usually respond within 24 hours."
+                accentColor="primary"
+                ocid="contact.email.button"
+              />
+            </motion.div>
 
-              <a
+            <motion.div variants={fadeUp}>
+              <ContactCard
                 href="tel:+918320808750"
-                className="flex items-center gap-4 p-4 rounded-xl border border-border hover:border-primary/40 hover:bg-muted/30 transition-all group"
-              >
-                <div className="p-3 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
-                  <Phone className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground uppercase tracking-wide mb-1">
-                    Phone
-                  </p>
-                  <p className="font-medium">+91 8320808750</p>
-                </div>
-              </a>
-            </div>
+                icon={Phone}
+                label="Phone"
+                value="+91 83208 08750"
+                description="Available for calls on weekdays. Leave a message if I miss you."
+                accentColor="accent"
+                ocid="contact.phone.button"
+              />
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            variants={fadeUp}
+            className="mt-16 flex items-center justify-center gap-4"
+          >
+            <div className="h-px flex-1 max-w-28 bg-gradient-to-r from-transparent to-border" />
+            <p className="text-xs text-muted-foreground/60 tracking-[0.18em] uppercase">
+              Open to opportunities
+            </p>
+            <div className="h-px flex-1 max-w-28 bg-gradient-to-l from-transparent to-border" />
           </motion.div>
         </motion.div>
       </div>
@@ -931,15 +1304,16 @@ function ContactSection() {
   );
 }
 
-// ── Footer ────────────────────────────────────────────────────────────────────
+// ── Footer ─────────────────────────────────────────────────────────────────────
 function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="border-t border-border py-8 px-6">
-      <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+    <footer className="border-t border-border py-6 px-6">
+      <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-sm text-muted-foreground">
         <p>
-          © {year} <span className="text-white font-semibold">Tushar Vala</span>
-          . All rights reserved.
+          © {year}{" "}
+          <span className="text-foreground font-semibold">Tushar Vala</span>.
+          All rights reserved.
         </p>
         <p>
           Built with ❤️ using{" "}
@@ -957,7 +1331,7 @@ function Footer() {
   );
 }
 
-// ── App ───────────────────────────────────────────────────────────────────────
+// ── App ────────────────────────────────────────────────────────────────────────
 export default function App() {
   return (
     <>

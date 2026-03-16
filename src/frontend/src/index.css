@@ -6,39 +6,41 @@
 
 @layer base {
   :root {
-    --background: 0.1 0.025 255;
+    --background: 0.08 0.025 255;
     --foreground: 0.95 0.01 250;
-    --card: 0.15 0.03 255;
+    --card: 0.12 0.03 258;
     --card-foreground: 0.95 0.01 250;
-    --popover: 0.15 0.03 255;
+    --popover: 0.12 0.03 258;
     --popover-foreground: 0.95 0.01 250;
-    --primary: 0.62 0.2 240;
+    --primary: 0.6 0.22 245;
     --primary-foreground: 0.98 0.005 240;
-    --secondary: 0.2 0.04 255;
+    --secondary: 0.18 0.04 258;
     --secondary-foreground: 0.85 0.02 250;
-    --muted: 0.22 0.03 255;
-    --muted-foreground: 0.6 0.04 250;
-    --accent: 0.72 0.18 200;
+    --muted: 0.2 0.03 258;
+    --muted-foreground: 0.55 0.05 250;
+    --accent: 0.68 0.16 195;
     --accent-foreground: 0.08 0.02 255;
+    --highlight: 0.75 0.17 70;
+    --highlight-foreground: 0.08 0.02 50;
     --destructive: 0.55 0.22 25;
     --destructive-foreground: 0.98 0.005 25;
-    --border: 0.25 0.04 255;
-    --input: 0.2 0.035 255;
-    --ring: 0.62 0.2 240;
+    --border: 0.22 0.045 255;
+    --input: 0.18 0.04 258;
+    --ring: 0.6 0.22 245;
     --radius: 0.75rem;
-    --chart-1: 0.62 0.2 240;
-    --chart-2: 0.72 0.18 200;
-    --chart-3: 0.65 0.18 280;
-    --chart-4: 0.7 0.16 170;
-    --chart-5: 0.6 0.2 300;
-    --sidebar: 0.12 0.03 255;
+    --chart-1: 0.6 0.22 245;
+    --chart-2: 0.68 0.16 195;
+    --chart-3: 0.75 0.17 70;
+    --chart-4: 0.65 0.18 280;
+    --chart-5: 0.7 0.16 170;
+    --sidebar: 0.1 0.028 257;
     --sidebar-foreground: 0.95 0.01 250;
-    --sidebar-primary: 0.62 0.2 240;
+    --sidebar-primary: 0.6 0.22 245;
     --sidebar-primary-foreground: 0.98 0.005 240;
-    --sidebar-accent: 0.2 0.04 255;
+    --sidebar-accent: 0.18 0.04 258;
     --sidebar-accent-foreground: 0.85 0.02 250;
-    --sidebar-border: 0.25 0.04 255;
-    --sidebar-ring: 0.62 0.2 240;
+    --sidebar-border: 0.22 0.045 255;
+    --sidebar-ring: 0.6 0.22 245;
   }
 }
 
@@ -68,20 +70,45 @@
 
 @layer utilities {
   .glow-blue {
-    box-shadow: 0 0 30px oklch(0.62 0.2 240 / 0.3);
+    box-shadow: 0 0 30px oklch(0.6 0.22 245 / 0.35);
   }
   .glow-cyan {
-    box-shadow: 0 0 20px oklch(0.72 0.18 200 / 0.25);
+    box-shadow: 0 0 20px oklch(0.68 0.16 195 / 0.3);
+  }
+  .glow-amber {
+    box-shadow: 0 0 20px oklch(0.75 0.17 70 / 0.3);
+  }
+  .glow-sm {
+    box-shadow: 0 0 15px oklch(0.6 0.22 245 / 0.2);
   }
   .text-glow {
-    text-shadow: 0 0 40px oklch(0.62 0.2 240 / 0.5);
+    text-shadow: 0 0 40px oklch(0.6 0.22 245 / 0.5);
   }
   .grid-bg {
     background-image: linear-gradient(
-        oklch(0.25 0.04 255 / 0.3) 1px,
+        oklch(0.22 0.045 255 / 0.25) 1px,
         transparent 1px
-      ), linear-gradient(90deg, oklch(0.25 0.04 255 / 0.3) 1px, transparent 1px);
-    background-size: 40px 40px;
+      ),
+      linear-gradient(90deg, oklch(0.22 0.045 255 / 0.25) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  .card-accent-primary {
+    border-left: 3px solid oklch(0.6 0.22 245);
+  }
+  .card-accent-teal {
+    border-left: 3px solid oklch(0.68 0.16 195);
+  }
+  .card-accent-amber {
+    border-left: 3px solid oklch(0.75 0.17 70);
+  }
+  .card-top-primary {
+    border-top: 3px solid oklch(0.6 0.22 245);
+  }
+  .card-top-teal {
+    border-top: 3px solid oklch(0.68 0.16 195);
+  }
+  .card-top-amber {
+    border-top: 3px solid oklch(0.75 0.17 70);
   }
 }
 
@@ -102,7 +129,7 @@
   position: absolute;
   inset: 0;
   border-radius: 1rem;
-  border: 2px solid oklch(0.62 0.2 240 / 0.8);
+  border: 2px solid oklch(0.6 0.22 245 / 0.8);
   animation: skill-ripple 0.65s ease-out forwards;
   pointer-events: none;
   z-index: 0;
@@ -139,7 +166,7 @@
   width: 280px;
   height: 280px;
   border-radius: 50%;
-  border: 2.5px solid oklch(0.62 0.2 240 / 0.9);
+  border: 2.5px solid oklch(0.6 0.22 245 / 0.9);
   pointer-events: none;
   z-index: 9999;
   animation: section-ripple-ring 0.75s cubic-bezier(0.2, 0.8, 0.4, 1) forwards;
@@ -152,8 +179,8 @@
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    oklch(0.62 0.2 240 / 0.6) 0%,
-    oklch(0.72 0.18 200 / 0.3) 40%,
+    oklch(0.6 0.22 245 / 0.6) 0%,
+    oklch(0.68 0.16 195 / 0.3) 40%,
     transparent 70%
   );
   pointer-events: none;
@@ -166,7 +193,7 @@
   width: 180px;
   height: 180px;
   border-radius: 50%;
-  border: 1.5px solid oklch(0.72 0.18 200 / 0.6);
+  border: 1.5px solid oklch(0.68 0.16 195 / 0.6);
   pointer-events: none;
   z-index: 9999;
   animation: section-ripple-ring 0.9s cubic-bezier(0.2, 0.8, 0.4, 1) 0.05s
