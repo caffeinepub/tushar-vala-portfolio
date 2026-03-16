@@ -1,0 +1,174 @@
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0.1 0.025 255;
+    --foreground: 0.95 0.01 250;
+    --card: 0.15 0.03 255;
+    --card-foreground: 0.95 0.01 250;
+    --popover: 0.15 0.03 255;
+    --popover-foreground: 0.95 0.01 250;
+    --primary: 0.62 0.2 240;
+    --primary-foreground: 0.98 0.005 240;
+    --secondary: 0.2 0.04 255;
+    --secondary-foreground: 0.85 0.02 250;
+    --muted: 0.22 0.03 255;
+    --muted-foreground: 0.6 0.04 250;
+    --accent: 0.72 0.18 200;
+    --accent-foreground: 0.08 0.02 255;
+    --destructive: 0.55 0.22 25;
+    --destructive-foreground: 0.98 0.005 25;
+    --border: 0.25 0.04 255;
+    --input: 0.2 0.035 255;
+    --ring: 0.62 0.2 240;
+    --radius: 0.75rem;
+    --chart-1: 0.62 0.2 240;
+    --chart-2: 0.72 0.18 200;
+    --chart-3: 0.65 0.18 280;
+    --chart-4: 0.7 0.16 170;
+    --chart-5: 0.6 0.2 300;
+    --sidebar: 0.12 0.03 255;
+    --sidebar-foreground: 0.95 0.01 250;
+    --sidebar-primary: 0.62 0.2 240;
+    --sidebar-primary-foreground: 0.98 0.005 240;
+    --sidebar-accent: 0.2 0.04 255;
+    --sidebar-accent-foreground: 0.85 0.02 250;
+    --sidebar-border: 0.25 0.04 255;
+    --sidebar-ring: 0.62 0.2 240;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display;
+  }
+}
+
+@layer utilities {
+  .glow-blue {
+    box-shadow: 0 0 30px oklch(0.62 0.2 240 / 0.3);
+  }
+  .glow-cyan {
+    box-shadow: 0 0 20px oklch(0.72 0.18 200 / 0.25);
+  }
+  .text-glow {
+    text-shadow: 0 0 40px oklch(0.62 0.2 240 / 0.5);
+  }
+  .grid-bg {
+    background-image: linear-gradient(
+        oklch(0.25 0.04 255 / 0.3) 1px,
+        transparent 1px
+      ), linear-gradient(90deg, oklch(0.25 0.04 255 / 0.3) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+}
+
+/* Soft skill ripple ring animation */
+@keyframes skill-ripple {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.skill-ripple {
+  display: block;
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  border: 2px solid oklch(0.62 0.2 240 / 0.8);
+  animation: skill-ripple 0.65s ease-out forwards;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Section click burst ripple */
+@keyframes section-ripple-ring {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes section-ripple-glow {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.85;
+  }
+  60% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0;
+  }
+}
+
+.section-ripple-ring {
+  position: fixed;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  border: 2.5px solid oklch(0.62 0.2 240 / 0.9);
+  pointer-events: none;
+  z-index: 9999;
+  animation: section-ripple-ring 0.75s cubic-bezier(0.2, 0.8, 0.4, 1) forwards;
+}
+
+.section-ripple-glow {
+  position: fixed;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    oklch(0.62 0.2 240 / 0.6) 0%,
+    oklch(0.72 0.18 200 / 0.3) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 9999;
+  animation: section-ripple-glow 0.6s ease-out forwards;
+}
+
+.section-ripple-ring2 {
+  position: fixed;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 1.5px solid oklch(0.72 0.18 200 / 0.6);
+  pointer-events: none;
+  z-index: 9999;
+  animation: section-ripple-ring 0.9s cubic-bezier(0.2, 0.8, 0.4, 1) 0.05s
+    forwards;
+}
