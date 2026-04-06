@@ -8,6 +8,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Toaster } from "@/components/ui/sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -19,17 +25,24 @@ import {
   Database,
   Download,
   ExternalLink,
+  Eye,
+  Filter,
   Github,
   GraduationCap,
   Lightbulb,
   Mail,
+  MapPin,
   Menu,
   MessageSquare,
   Phone,
+  ShoppingCart,
+  Star,
+  Target,
   TrendingUp,
   Users,
   Wrench,
   X,
+  Zap,
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -52,17 +65,14 @@ const TECHNICAL_SKILLS = [
   {
     category: "Programming & Query Languages",
     icon: <Code2 className="w-4 h-4" />,
-    skills: [
-      "Python (NumPy, Pandas, Matplotlib)",
-      "SQL",
-      "— Web & Core Programming —",
-      "C",
-      "C++",
-      "HTML",
-      "CSS",
-      "JavaScript",
-    ],
-    accent: "teal" as const,
+    skills: ["Python (NumPy, Pandas, Matplotlib)", "SQL"],
+    accent: "primary" as const,
+  },
+  {
+    category: "Web & Core Programming",
+    icon: <Wrench className="w-4 h-4" />,
+    skills: ["C", "C++", "HTML", "CSS", "JavaScript"],
+    accent: "primary" as const,
   },
   {
     category: "Database Skills",
@@ -104,30 +114,49 @@ const EXCEL_PROJECTS = [
       "A comprehensive Excel dashboard analyzing sales data with dynamic charts, KPIs, pivot tables, and automated reporting. Provides actionable insights into revenue trends and performance metrics.",
     github: "https://github.com/tushar123851/finalprojectexcal",
     tags: ["Excel", "Pivot Tables", "Charts", "KPI"],
-  },
-  {
-    title: "Zomato Sales Dashboard",
-    description:
-      "An in-depth Excel dashboard analyzing Zomato restaurant sales trends, cuisine performance, city-wise insights, and customer ordering patterns with interactive filters.",
-    github: "https://github.com/tushar123851/Main-project-",
-    tags: ["Excel", "Data Analysis", "Visualization", "Trends"],
+    hasDetail: true,
   },
 ];
 
 const POWERBI_PROJECTS = [
+  {
+    title: "Bright Future School Analysis",
+    description:
+      "Power BI dashboard analyzing school performance data including student results, attendance trends, subject-wise scores, and institutional KPIs to support data-driven education management.",
+    github: "https://github.com/tushar123851/Bright_future_school_analysis",
+    tags: ["Power BI", "Education Analytics", "DAX", "KPI"],
+  },
+  {
+    title: "Velora Retails Analysis",
+    description:
+      "Power BI retail analytics dashboard providing insights into sales performance, product trends, customer behavior, and revenue metrics to drive smarter business decisions.",
+    github: "https://github.com/tushar123851/velora_retails_analys",
+    tags: ["Power BI", "Retail Analytics", "DAX", "Sales"],
+  },
   {
     title: "Car Sales Dashboard",
     description:
       "Interactive Power BI dashboard tracking car sales metrics across models, dealerships, and regions. Features revenue analysis, YoY comparisons, and performance KPIs with drill-through capabilities.",
     github: "https://github.com/tushar123851/powerbicardashboard",
     tags: ["Power BI", "DAX", "Sales Analytics", "KPI"],
+    hasDetail: true,
+    isCarSales: true,
   },
   {
-    title: "Customer Dashboard",
+    title: "AdventureWorks Sales Dashboard",
     description:
-      "Power BI dashboard delivering deep customer analytics and segmentation insights. Visualizes demographics, purchase behavior, retention rates, and customer lifetime value.",
-    github: "https://github.com/tushar123851/powerbicuatomerdashboard",
-    tags: ["Power BI", "DAX", "Segmentation", "Analytics"],
+      "Power BI dashboard built on the AdventureWorks dataset, visualizing sales performance, product trends, regional breakdowns, and executive KPIs with interactive drill-through capabilities.",
+    github: "https://github.com/tushar123851/AdventureWorks_Sales_Dashboard-",
+    tags: ["Power BI", "DAX", "AdventureWorks", "Sales Analytics"],
+    hasDetail: true,
+    isAdventureWorks: true,
+  },
+  {
+    title: "Zomato Sales Analysis",
+    description:
+      "Power BI report analyzing Zomato restaurant sales data with insights into cuisine performance, city-wise trends, order patterns, and revenue metrics through interactive visualizations.",
+    github: "https://github.com/tushar123851/Zomato_sales_analysis",
+    tags: ["Power BI", "DAX", "Food Analytics", "Trends"],
   },
 ];
 
@@ -599,7 +628,7 @@ function AboutSection() {
                 </CardHeader>
                 <CardContent>
                   <Badge className="bg-accent/15 text-accent hover:bg-accent/25 border-0 rounded-full font-semibold">
-                    Average: 93.56%
+                    Average: 93.86%
                   </Badge>
                 </CardContent>
               </Card>
@@ -731,8 +760,6 @@ function TechSkillCard({
     setTimeout(() => setActive(false), 700);
   };
 
-  const isProgramming = group.category === "Programming & Query Languages";
-
   return (
     <motion.div
       variants={fadeUp}
@@ -761,13 +788,7 @@ function TechSkillCard({
       >
         <CardHeader className="pb-3">
           <div
-            className={`flex items-center gap-2 ${
-              group.accent === "primary"
-                ? "text-primary"
-                : group.accent === "teal"
-                  ? "text-accent"
-                  : "text-yellow-400"
-            }`}
+            className={`flex items-center gap-2 ${{ primary: "text-primary", teal: "text-accent", amber: "text-yellow-400" }[group.accent as AccentKey] ?? "text-primary"}`}
           >
             {group.icon}
             <CardTitle className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
@@ -788,14 +809,6 @@ function TechSkillCard({
                     {skill.replace(/^— | —$/g, "")}
                   </span>
                 </div>
-              ) : isProgramming ? (
-                <Badge
-                  key={skill}
-                  variant="outline"
-                  className="text-xs font-medium cursor-default bg-white text-black border-gray-200 hover:bg-gray-100"
-                >
-                  {skill}
-                </Badge>
               ) : (
                 <Badge
                   key={skill}
@@ -905,16 +918,1350 @@ function SkillsSection() {
   );
 }
 
+// ── Sales Report Detail Modal ─────────────────────────────────────────────────
+function SalesReportModal({
+  open,
+  onClose,
+}: { open: boolean; onClose: () => void }) {
+  const kpis = [
+    {
+      label: "Total Revenue",
+      value: "₹2,29,192.47",
+      icon: TrendingUp,
+      color: "text-primary",
+    },
+    {
+      label: "Total Transactions",
+      value: "250",
+      icon: ShoppingCart,
+      color: "text-accent",
+    },
+    {
+      label: "Total Customers",
+      value: "50",
+      icon: Users,
+      color: "text-yellow-400",
+    },
+    {
+      label: "Top Customer",
+      value: "Mark Carter",
+      icon: Star,
+      color: "text-pink-400",
+    },
+  ];
+
+  const components = [
+    {
+      num: "01",
+      title: "Top 5 Customers by Revenue",
+      icon: Star,
+      desc: "Displays highest revenue-generating customers. Mark Carter is the top contributor. Helps identify high-value customers for targeting.",
+      insight: "Focus on retention strategies for top customers.",
+    },
+    {
+      num: "02",
+      title: "Product Quantity Analysis",
+      icon: BarChart3,
+      desc: "Shows quantity sold per product. High-demand products: BookShelf, Smartphone, Keyboard.",
+      insight: "Optimize inventory for fast-moving products.",
+    },
+    {
+      num: "03",
+      title: "Customer Distribution by Region",
+      icon: MapPin,
+      desc: "Pie chart covering: North (59), Central (54), East (48), West (47), South (42).",
+      insight: "North region has the highest customer base.",
+    },
+    {
+      num: "04",
+      title: "Sales by Product",
+      icon: TrendingUp,
+      desc: "Top performing: Laptop (~₹67K), Smartphone (~₹67K), Desk (~₹23K).",
+      insight: "Electronics category drives major revenue.",
+    },
+    {
+      num: "05",
+      title: "Monthly Sales Trend",
+      icon: Target,
+      desc: "Tracks sales over 2024–2025. Peak months: Jan 2025 (~₹25K), Dec 2024 (~₹23K).",
+      insight: "Seasonal trends can guide marketing campaigns.",
+    },
+  ];
+
+  const features = [
+    "Interactive Dashboard",
+    "Clean & Professional UI (Blue Theme)",
+    "Drill-down Analysis",
+    "Real-time Filtering",
+    "Business-focused Insights",
+  ];
+
+  return (
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 gap-0 border-border bg-card">
+        {/* Hero Banner */}
+        <div
+          className="relative overflow-hidden rounded-t-xl"
+          style={{
+            background:
+              "linear-gradient(135deg, oklch(0.13 0.035 255) 0%, oklch(0.18 0.045 245) 100%)",
+          }}
+        >
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(ellipse at 30% 50%, oklch(0.60 0.22 245 / 0.15) 0%, transparent 60%)",
+            }}
+          />
+
+          {/* Dashboard Screenshot */}
+          <div className="relative px-6 pt-6 pb-0">
+            <img
+              src="/assets/sales.png-019d5bed-b30f-719c-b0c3-2804ecb5ec30.png"
+              alt="Sales Report Dashboard Screenshot"
+              className="w-full rounded-t-xl object-cover shadow-2xl border border-border/40"
+              style={{
+                maxHeight: "280px",
+                objectFit: "cover",
+                objectPosition: "top",
+              }}
+              onError={(e) => {
+                (e.target as HTMLImageElement).style.display = "none";
+              }}
+            />
+          </div>
+        </div>
+
+        <div className="p-6 space-y-8">
+          <DialogHeader>
+            <div className="flex items-start gap-3">
+              <div className="p-2.5 rounded-xl bg-primary/10 text-primary mt-0.5">
+                <BarChart3 className="w-6 h-6" />
+              </div>
+              <div>
+                <DialogTitle className="font-display text-2xl font-bold text-foreground">
+                  Sales Report Dashboard
+                </DialogTitle>
+                <p className="text-muted-foreground mt-1 text-sm">
+                  Interactive Excel data visualization project — business
+                  performance analysis
+                </p>
+              </div>
+            </div>
+          </DialogHeader>
+
+          {/* Project Overview */}
+          <div
+            className="rounded-xl border border-border/60 p-5 space-y-3"
+            style={{ background: "oklch(0.12 0.03 255)" }}
+          >
+            <h3 className="font-semibold text-foreground flex items-center gap-2 text-base">
+              🧾 Project Overview
+            </h3>
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              The Sales Report Dashboard is an interactive data visualization
+              project designed to analyze and monitor business performance
+              across multiple dimensions such as revenue, customers, products,
+              and regions.
+            </p>
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              This dashboard helps stakeholders make data-driven decisions by
+              providing a clear and dynamic view of sales trends and customer
+              behavior.
+            </p>
+          </div>
+
+          {/* Objectives */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-foreground flex items-center gap-2 text-base">
+              <Target className="w-4 h-4 text-primary" /> Objectives
+            </h3>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {[
+                "Track overall business performance 📈",
+                "Identify top customers and products 🏆",
+                "Analyze sales trends over time 📅",
+                "Understand regional customer distribution 🌍",
+                "Enable interactive filtering for deeper insights 🔍",
+              ].map((obj) => (
+                <li
+                  key={obj}
+                  className="flex items-start gap-2 text-sm text-muted-foreground"
+                >
+                  <span className="mt-0.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0 mt-1.5" />
+                  {obj}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* KPI Cards */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-foreground flex items-center gap-2 text-base">
+              📌 Key Metrics (KPIs)
+            </h3>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {kpis.map((kpi) => (
+                <div
+                  key={kpi.label}
+                  className="rounded-xl border border-border/60 p-4 text-center space-y-1"
+                  style={{ background: "oklch(0.12 0.03 255)" }}
+                >
+                  <kpi.icon className={`w-5 h-5 mx-auto mb-2 ${kpi.color}`} />
+                  <p className={`font-bold text-lg font-display ${kpi.color}`}>
+                    {kpi.value}
+                  </p>
+                  <p className="text-xs text-muted-foreground leading-tight">
+                    {kpi.label}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Dashboard Components */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-foreground flex items-center gap-2 text-base">
+              📊 Dashboard Components & Insights
+            </h3>
+            <div className="space-y-3">
+              {components.map((comp) => (
+                <div
+                  key={comp.num}
+                  className="rounded-xl border border-border/60 p-4"
+                  style={{ background: "oklch(0.12 0.03 255)" }}
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded-md shrink-0 mt-0.5">
+                      {comp.num}
+                    </span>
+                    <div className="flex-1 space-y-1.5">
+                      <div className="flex items-center gap-2">
+                        <comp.icon className="w-4 h-4 text-primary shrink-0" />
+                        <p className="font-semibold text-foreground text-sm">
+                          {comp.title}
+                        </p>
+                      </div>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {comp.desc}
+                      </p>
+                      <div
+                        className="flex items-start gap-1.5 mt-2 p-2.5 rounded-lg"
+                        style={{ background: "oklch(0.16 0.04 245)" }}
+                      >
+                        <Zap className="w-3.5 h-3.5 text-yellow-400 shrink-0 mt-0.5" />
+                        <p className="text-xs text-yellow-300/90">
+                          <span className="font-semibold">
+                            Business Insight:
+                          </span>{" "}
+                          {comp.insight}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Filters */}
+          <div
+            className="rounded-xl border border-border/60 p-5 space-y-3"
+            style={{ background: "oklch(0.12 0.03 255)" }}
+          >
+            <h3 className="font-semibold text-foreground flex items-center gap-2 text-base">
+              <Filter className="w-4 h-4 text-accent" /> Interactive Filters
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {[
+                "Customer Name Filter",
+                "Region Filter",
+                "Cash",
+                "Credit Card",
+                "Debit Card",
+                "PayPal",
+              ].map((f) => (
+                <Badge
+                  key={f}
+                  variant="outline"
+                  className="text-xs border-accent/40 text-accent bg-accent/5"
+                >
+                  {f}
+                </Badge>
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Users can dynamically explore the data based on their needs.
+            </p>
+          </div>
+
+          {/* Tools & Technologies */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-foreground flex items-center gap-2 text-base">
+              🛠 Tools & Technologies
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {[
+                "Microsoft Excel",
+                "Power BI",
+                "DAX",
+                "Data Modeling",
+                "Pivot Tables",
+              ].map((t) => (
+                <Badge
+                  key={t}
+                  className="text-xs bg-primary/10 text-primary border-primary/20 border"
+                >
+                  {t}
+                </Badge>
+              ))}
+            </div>
+          </div>
+
+          {/* Key Features */}
+          <div
+            className="rounded-xl border border-primary/20 p-5 space-y-3"
+            style={{ background: "oklch(0.12 0.05 245)" }}
+          >
+            <h3 className="font-semibold text-foreground flex items-center gap-2 text-base">
+              🚀 Key Features
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {features.map((f) => (
+                <div
+                  key={f}
+                  className="flex items-center gap-2 text-sm text-muted-foreground"
+                >
+                  <span className="w-4 h-4 rounded-full bg-primary/20 text-primary flex items-center justify-center text-xs font-bold shrink-0">
+                    ✓
+                  </span>
+                  {f}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Conclusion */}
+          <div
+            className="rounded-xl border border-border/60 p-5 space-y-2"
+            style={{ background: "oklch(0.12 0.03 255)" }}
+          >
+            <h3 className="font-semibold text-foreground flex items-center gap-2 text-base">
+              🧠 Conclusion
+            </h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              This dashboard provides a comprehensive view of sales performance,
+              enabling businesses to improve customer targeting, optimize
+              product strategy, identify sales trends, and make informed
+              decisions.
+            </p>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-3 pt-2">
+            <Button asChild className="flex-1">
+              <a
+                href="https://github.com/tushar123851/finalprojectexcal"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2"
+              >
+                <Github className="w-4 h-4" />
+                View on GitHub
+                <ExternalLink className="w-3 h-3 ml-auto" />
+              </a>
+            </Button>
+            <Button variant="outline" onClick={onClose} className="px-6">
+              Close
+            </Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+// ── Car Sales Dashboard Detail Modal ─────────────────────────────────────────
+function CarSalesDashboardModal({
+  open,
+  onClose,
+}: { open: boolean; onClose: () => void }) {
+  const images = [
+    {
+      src: "/assets/car-019d5bf6-dbe0-726e-89d3-81a57344b359.png",
+      label: "Overview Dashboard",
+      desc: "High-level KPIs: Total Sales ₹129M, 216 cars sold, Top 5 cities, Gender distribution.",
+    },
+    {
+      src: "/assets/dealer-019d5bf6-dc07-74f8-9016-4f9ff49fde91.png",
+      label: "Brand & Dealer Analysis",
+      desc: "Brand-wise sales, top-selling models: Altroz, Venue, Nexon. Fuel type distribution.",
+    },
+    {
+      src: "/assets/customer_performance-019d5bf6-dd37-71d9-ae89-2fc64877a994.png",
+      label: "Customer & Regional Performance",
+      desc: "Top 5 customers, state-wise sales, monthly trends for peak/low periods.",
+    },
+    {
+      src: "/assets/carservices-019d5bf6-de48-72bd-a7f0-1e132efc20b4.gif",
+      label: "Car Services Animation",
+      desc: "Visual showcase of the dashboard's interactive capabilities.",
+      isGif: true,
+    },
+  ];
+
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [autoPlay, setAutoPlay] = useState(true);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const IMAGE_COUNT = 4;
+  useEffect(() => {
+    if (!open) return;
+    if (autoPlay) {
+      timerRef.current = setInterval(() => {
+        setActiveIdx((prev) => (prev + 1) % IMAGE_COUNT);
+      }, 3000);
+    }
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, autoPlay]);
+
+  const goTo = (idx: number) => {
+    setAutoPlay(false);
+    setActiveIdx(idx);
+    if (timerRef.current) clearInterval(timerRef.current);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 gap-0 border-border bg-card">
+        {/* Header Banner */}
+        <div
+          className="relative overflow-hidden rounded-t-xl"
+          style={{
+            background:
+              "linear-gradient(135deg, oklch(0.13 0.035 255) 0%, oklch(0.18 0.045 245) 100%)",
+          }}
+        >
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(ellipse at 30% 50%, oklch(0.60 0.22 245 / 0.18) 0%, transparent 60%)",
+            }}
+          />
+
+          {/* Animated Image Carousel */}
+          <div className="relative px-6 pt-6 pb-4">
+            <div
+              className="relative rounded-xl overflow-hidden border border-border/40 shadow-2xl"
+              style={{ height: "280px" }}
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeIdx}
+                  initial={{ opacity: 0, scale: 1.04, rotateY: 8 }}
+                  animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                  exit={{ opacity: 0, scale: 0.96, rotateY: -8 }}
+                  transition={{ duration: 0.55, ease: "easeInOut" }}
+                  className="absolute inset-0"
+                >
+                  <img
+                    src={images[activeIdx].src}
+                    alt={images[activeIdx].label}
+                    className="w-full h-full object-cover object-top"
+                    style={
+                      images[activeIdx].isGif
+                        ? {
+                            objectFit: "contain",
+                            background: "oklch(0.10 0.02 255)",
+                          }
+                        : {}
+                    }
+                  />
+                  {/* Overlay label */}
+                  <div
+                    className="absolute bottom-0 left-0 right-0 px-4 py-3"
+                    style={{
+                      background:
+                        "linear-gradient(transparent, oklch(0.08 0.02 255 / 0.92))",
+                    }}
+                  >
+                    <p className="text-xs font-semibold text-primary uppercase tracking-widest">
+                      {images[activeIdx].label}
+                    </p>
+                    <p className="text-xs text-muted-foreground leading-snug mt-0.5">
+                      {images[activeIdx].desc}
+                    </p>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Auto-rotate badge */}
+              {autoPlay && (
+                <div className="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-primary/40 bg-primary/10 text-primary text-xs font-medium backdrop-blur-sm">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary animate-ping inline-block" />
+                  Auto
+                </div>
+              )}
+            </div>
+
+            {/* Thumbnail nav */}
+            <div className="flex gap-2 mt-3 justify-center">
+              {images.map((img, i) => (
+                <button
+                  key={img.src}
+                  type="button"
+                  onClick={() => goTo(i)}
+                  className={`relative rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+                    activeIdx === i
+                      ? "border-primary scale-105 shadow-lg shadow-primary/30"
+                      : "border-border/40 opacity-60 hover:opacity-90 hover:border-border"
+                  }`}
+                  style={{ width: 72, height: 48 }}
+                  aria-label={img.label}
+                >
+                  <img
+                    src={img.src}
+                    alt={img.label}
+                    className="w-full h-full object-cover object-top"
+                    style={
+                      img.isGif
+                        ? {
+                            objectFit: "contain",
+                            background: "oklch(0.10 0.02 255)",
+                          }
+                        : {}
+                    }
+                  />
+                  {activeIdx === i && (
+                    <div className="absolute inset-0 bg-primary/10 rounded-lg" />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="p-6 space-y-7">
+          <DialogHeader>
+            <div className="flex items-start gap-3">
+              <div className="p-2.5 rounded-xl bg-primary/10 text-primary mt-0.5">
+                <BarChart3 className="w-6 h-6" />
+              </div>
+              <div>
+                <DialogTitle className="font-display text-2xl font-bold text-foreground">
+                  🚗 Car Sales Analysis Dashboard
+                </DialogTitle>
+                <p className="text-muted-foreground mt-1 text-sm">
+                  Interactive Power BI dashboard — sales performance, customer
+                  behavior & regional trends
+                </p>
+              </div>
+            </div>
+          </DialogHeader>
+
+          {/* Project Overview */}
+          <div
+            className="rounded-xl border border-border/60 p-5 space-y-3"
+            style={{ background: "oklch(0.12 0.03 255)" }}
+          >
+            <h3 className="font-semibold text-foreground flex items-center gap-2 text-base">
+              📌 Project Overview
+            </h3>
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              This project is an{" "}
+              <strong className="text-foreground">
+                interactive Car Sales Analysis Dashboard
+              </strong>{" "}
+              built using <strong className="text-primary">Power BI</strong>. It
+              provides insights into{" "}
+              <strong className="text-foreground">
+                sales performance, customer behavior, brand-wise sales, fuel
+                type distribution, and regional trends
+              </strong>{" "}
+              to support data-driven decision-making.
+            </p>
+          </div>
+
+          {/* KPI Cards */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-foreground flex items-center gap-2 text-base">
+              📌 Key Business KPIs
+            </h3>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {[
+                {
+                  label: "Total Sales",
+                  value: "₹129M",
+                  icon: TrendingUp,
+                  color: "text-primary",
+                },
+                {
+                  label: "Cars Sold",
+                  value: "216",
+                  icon: ShoppingCart,
+                  color: "text-accent",
+                },
+                {
+                  label: "Top Cities",
+                  value: "5 Cities",
+                  icon: MapPin,
+                  color: "text-yellow-400",
+                },
+                {
+                  label: "Fuel Types",
+                  value: "4 Types",
+                  icon: Zap,
+                  color: "text-pink-400",
+                },
+              ].map((kpi) => (
+                <div
+                  key={kpi.label}
+                  className="rounded-xl border border-border/60 p-4 text-center space-y-1"
+                  style={{ background: "oklch(0.12 0.03 255)" }}
+                >
+                  <kpi.icon className={`w-5 h-5 mx-auto mb-2 ${kpi.color}`} />
+                  <p className={`font-bold text-lg font-display ${kpi.color}`}>
+                    {kpi.value}
+                  </p>
+                  <p className="text-xs text-muted-foreground leading-tight">
+                    {kpi.label}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Dashboard Tabs Overview */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-foreground flex items-center gap-2 text-base">
+              📊 Dashboard Views
+            </h3>
+            <div className="space-y-3">
+              {[
+                {
+                  num: "01",
+                  title: "Overview Dashboard",
+                  desc: "High-level overview of overall car sales performance. Highlights key KPIs: Total Sales, Total Customers, Average Monthly Sales, and Total Quantity Sold.",
+                  insights: [
+                    "Total sales reached ₹129M — strong overall performance",
+                    "216 cars sold across multiple cities",
+                    "Top 5 cities contribute majority of total revenue",
+                    "Gender-wise customer distribution for buyer demographics",
+                  ],
+                },
+                {
+                  num: "02",
+                  title: "Brand & Fuel Type Analysis",
+                  desc: "Focuses on brand, model, and fuel-type analysis to understand product-level performance and customer preferences.",
+                  insights: [
+                    "Top-selling car models: Altroz, Venue, and Nexon",
+                    "Brand-wise contribution to total sales",
+                    "Fuel type demand: Diesel, Petrol, CNG, and Electric",
+                    "Helps optimize inventory and brand-level strategies",
+                  ],
+                },
+                {
+                  num: "03",
+                  title: "Customer & Regional Performance",
+                  desc: "Analyzes customer behavior and regional sales performance to identify high-value customers and profitable regions.",
+                  insights: [
+                    "Top 5 customers by revenue highlighted",
+                    "State-wise sales: Rajasthan, Punjab, Telangana, etc.",
+                    "Monthly sales trends for peak and low-performing months",
+                    "Supports targeted marketing and retention strategies",
+                  ],
+                },
+              ].map((tab) => (
+                <div
+                  key={tab.num}
+                  className="rounded-xl border border-border/60 p-4"
+                  style={{ background: "oklch(0.12 0.03 255)" }}
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded-md shrink-0 mt-0.5">
+                      {tab.num}
+                    </span>
+                    <div className="flex-1 space-y-2">
+                      <p className="font-semibold text-foreground text-sm">
+                        {tab.title}
+                      </p>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {tab.desc}
+                      </p>
+                      <ul className="space-y-1 mt-2">
+                        {tab.insights.map((ins) => (
+                          <li
+                            key={ins}
+                            className="flex items-start gap-2 text-xs text-muted-foreground"
+                          >
+                            <span className="mt-1 w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+                            {ins}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Dashboard Insights */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-foreground flex items-center gap-2 text-base">
+              📈 Dashboard Insights
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {[
+                {
+                  num: "1️⃣",
+                  title: "Top Cities by Sales",
+                  desc: "Identifies top 5 cities contributing highest revenue for focused sales & marketing.",
+                },
+                {
+                  num: "2️⃣",
+                  title: "Brand-wise Sales",
+                  desc: "Contribution of Maruti, Hyundai, Toyota, Tata, Mahindra to total sales.",
+                },
+                {
+                  num: "3️⃣",
+                  title: "Fuel Type Distribution",
+                  desc: "Customer preference across Diesel, Petrol, CNG, and Electric vehicles.",
+                },
+                {
+                  num: "4️⃣",
+                  title: "Customer Demographics",
+                  desc: "Breakdown by gender for deeper buyer behavior insights.",
+                },
+                {
+                  num: "5️⃣",
+                  title: "Monthly Sales Trend",
+                  desc: "Tracks sales variation across months to identify peak and low sales periods.",
+                },
+                {
+                  num: "6️⃣",
+                  title: "Top Models by Quantity",
+                  desc: "High-demand models: Altroz, Venue, Nexon, Sonet, Baleno.",
+                },
+              ].map((ins) => (
+                <div
+                  key={ins.num}
+                  className="rounded-xl border border-border/60 p-3 flex items-start gap-3"
+                  style={{ background: "oklch(0.12 0.03 255)" }}
+                >
+                  <span className="text-lg shrink-0">{ins.num}</span>
+                  <div>
+                    <p className="font-semibold text-foreground text-sm">
+                      {ins.title}
+                    </p>
+                    <p className="text-xs text-muted-foreground leading-relaxed mt-0.5">
+                      {ins.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Tools */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-foreground flex items-center gap-2 text-base">
+              🛠 Tools & Technologies
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {[
+                "Power BI",
+                "DAX",
+                "Power Query",
+                "Data Modeling",
+                "Data Cleaning",
+                "Data Visualization",
+                "Business Analytics",
+              ].map((t) => (
+                <Badge
+                  key={t}
+                  className="text-xs bg-primary/10 text-primary border-primary/20 border"
+                >
+                  {t}
+                </Badge>
+              ))}
+            </div>
+          </div>
+
+          {/* Business Value */}
+          <div
+            className="rounded-xl border border-primary/20 p-5 space-y-3"
+            style={{ background: "oklch(0.12 0.05 245)" }}
+          >
+            <h3 className="font-semibold text-foreground flex items-center gap-2 text-base">
+              🎯 Business Value
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {[
+                "Identifies top-performing brands and cities",
+                "Supports inventory planning based on demand",
+                "Improves customer targeting strategies",
+                "Enables sales trend forecasting",
+              ].map((v) => (
+                <div
+                  key={v}
+                  className="flex items-center gap-2 text-sm text-muted-foreground"
+                >
+                  <span className="w-4 h-4 rounded-full bg-primary/20 text-primary flex items-center justify-center text-xs font-bold shrink-0">
+                    ✓
+                  </span>
+                  {v}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-3 pt-2">
+            <Button asChild className="flex-1">
+              <a
+                href="https://github.com/tushar123851/powerbicardashboard"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2"
+              >
+                <Github className="w-4 h-4" />
+                View on GitHub
+                <ExternalLink className="w-3 h-3 ml-auto" />
+              </a>
+            </Button>
+            <Button variant="outline" onClick={onClose} className="px-6">
+              Close
+            </Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+// ── AdventureWorks Sales Dashboard Detail Modal ──────────────────────────────
+function AdventureWorksDashboardModal({
+  open,
+  onClose,
+}: { open: boolean; onClose: () => void }) {
+  const images = [
+    {
+      src: "/assets/overview_dashboard-019d611f-74bf-72b5-ab43-df1f8510d881.jpg",
+      label: "Overview Dashboard",
+      desc: "Revenue $9.71M, Profit $4.12M, Orders 12K, Return Rate 2.14%. Strong revenue with controlled return rate.",
+    },
+    {
+      src: "/assets/customer_details-019d611f-7387-72e2-9e25-51ebb96b6a75.jpg",
+      label: "Customer Analysis",
+      desc: "17K total customers, avg revenue per customer $1.431K. Income-level & occupation-based purchasing trends.",
+    },
+    {
+      src: "/assets/products_details-019d611f-7340-767b-81d2-37d5b3a17cc3.jpg",
+      label: "Product & Profit Analysis",
+      desc: "Top category: Accessories. Profit trend over time. Accessories generate highest order volume.",
+    },
+    {
+      src: "/assets/adventureworkssales_1-019d611f-74b8-70b9-ad36-1e4b596c03b9.jpg",
+      label: "Global Sales Analysis",
+      desc: "Sales distribution across North America, Europe, and Pacific. North America and Europe dominate sales.",
+    },
+  ];
+
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [autoPlay, setAutoPlay] = useState(true);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const IMAGE_COUNT = 4;
+  useEffect(() => {
+    if (!open) return;
+    if (autoPlay) {
+      timerRef.current = setInterval(() => {
+        setActiveIdx((prev) => (prev + 1) % IMAGE_COUNT);
+      }, 3000);
+    }
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, autoPlay]);
+
+  const goTo = (idx: number) => {
+    setAutoPlay(false);
+    setActiveIdx(idx);
+    if (timerRef.current) clearInterval(timerRef.current);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 gap-0 border-border bg-card">
+        {/* Header Banner */}
+        <div
+          className="relative overflow-hidden rounded-t-xl"
+          style={{
+            background:
+              "linear-gradient(135deg, oklch(0.13 0.035 255) 0%, oklch(0.18 0.045 245) 100%)",
+          }}
+        >
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "radial-gradient(ellipse at 30% 50%, oklch(0.60 0.22 245 / 0.18) 0%, transparent 60%)",
+            }}
+          />
+
+          {/* Animated Image Carousel */}
+          <div className="relative px-6 pt-6 pb-4">
+            <div
+              className="relative rounded-xl overflow-hidden border border-border/40 shadow-2xl"
+              style={{ height: "280px" }}
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeIdx}
+                  initial={{ opacity: 0, scale: 1.04, rotateY: 8 }}
+                  animate={{ opacity: 1, scale: 1, rotateY: 0 }}
+                  exit={{ opacity: 0, scale: 0.96, rotateY: -8 }}
+                  transition={{ duration: 0.55, ease: "easeInOut" }}
+                  className="absolute inset-0"
+                >
+                  <img
+                    src={images[activeIdx].src}
+                    alt={images[activeIdx].label}
+                    className="w-full h-full object-cover object-top"
+                  />
+                  {/* Overlay label */}
+                  <div
+                    className="absolute bottom-0 left-0 right-0 px-4 py-3"
+                    style={{
+                      background:
+                        "linear-gradient(transparent, oklch(0.08 0.02 255 / 0.92))",
+                    }}
+                  >
+                    <p className="text-xs font-semibold text-primary uppercase tracking-widest">
+                      {images[activeIdx].label}
+                    </p>
+                    <p className="text-xs text-muted-foreground leading-snug mt-0.5">
+                      {images[activeIdx].desc}
+                    </p>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Auto-rotate badge */}
+              {autoPlay && (
+                <div className="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-primary/40 bg-primary/10 text-primary text-xs font-medium backdrop-blur-sm">
+                  <span className="w-1.5 h-1.5 rounded-full bg-primary animate-ping inline-block" />
+                  Auto
+                </div>
+              )}
+            </div>
+
+            {/* Thumbnail nav */}
+            <div className="flex gap-2 mt-3 justify-center">
+              {images.map((img, i) => (
+                <button
+                  key={img.src}
+                  type="button"
+                  onClick={() => goTo(i)}
+                  className={`relative rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+                    activeIdx === i
+                      ? "border-primary scale-105 shadow-lg shadow-primary/30"
+                      : "border-border/40 opacity-60 hover:opacity-90 hover:border-border"
+                  }`}
+                  style={{ width: 72, height: 48 }}
+                  aria-label={img.label}
+                >
+                  <img
+                    src={img.src}
+                    alt={img.label}
+                    className="w-full h-full object-cover object-top"
+                  />
+                  {activeIdx === i && (
+                    <div className="absolute inset-0 bg-primary/10 rounded-lg" />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="p-6 space-y-7">
+          <DialogHeader>
+            <div className="flex items-start gap-3">
+              <div className="p-2.5 rounded-xl bg-primary/10 text-primary mt-0.5">
+                <BarChart3 className="w-6 h-6" />
+              </div>
+              <div>
+                <DialogTitle className="font-display text-2xl font-bold text-foreground">
+                  🏢 AdventureWorks Sales Analytics Dashboard
+                </DialogTitle>
+                <p className="text-muted-foreground mt-1 text-sm">
+                  Interactive Power BI dashboard — revenue performance, orders &
+                  profit trends, global sales & customer segmentation
+                </p>
+              </div>
+            </div>
+          </DialogHeader>
+
+          {/* Project Overview */}
+          <div
+            className="rounded-xl border border-border/60 p-5 space-y-3"
+            style={{ background: "oklch(0.12 0.03 255)" }}
+          >
+            <h3 className="font-semibold text-foreground flex items-center gap-2 text-base">
+              📌 Project Overview
+            </h3>
+            <p className="text-muted-foreground text-sm leading-relaxed">
+              Interactive{" "}
+              <strong className="text-primary">Power BI dashboard</strong> built
+              on the{" "}
+              <strong className="text-foreground">
+                AdventureWorks dataset
+              </strong>{" "}
+              to analyze{" "}
+              <strong className="text-foreground">
+                revenue performance, orders & profit trends, global sales
+                distribution, product-level insights, and customer segmentation
+              </strong>
+              . Provides business-driven insights with a clean and modern UI.
+            </p>
+          </div>
+
+          {/* KPI Cards */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-foreground flex items-center gap-2 text-base">
+              📌 Key Business KPIs
+            </h3>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {[
+                {
+                  label: "Revenue",
+                  value: "$9.71M",
+                  icon: TrendingUp,
+                  color: "text-primary",
+                },
+                {
+                  label: "Profit",
+                  value: "$4.12M",
+                  icon: BarChart3,
+                  color: "text-accent",
+                },
+                {
+                  label: "Orders",
+                  value: "12K",
+                  icon: ShoppingCart,
+                  color: "text-yellow-400",
+                },
+                {
+                  label: "Return Rate",
+                  value: "2.14%",
+                  icon: Target,
+                  color: "text-pink-400",
+                },
+              ].map((kpi) => (
+                <div
+                  key={kpi.label}
+                  className="rounded-xl border border-border/60 p-4 text-center space-y-1"
+                  style={{ background: "oklch(0.12 0.03 255)" }}
+                >
+                  <kpi.icon className={`w-5 h-5 mx-auto mb-2 ${kpi.color}`} />
+                  <p className={`font-bold text-lg font-display ${kpi.color}`}>
+                    {kpi.value}
+                  </p>
+                  <p className="text-xs text-muted-foreground leading-tight">
+                    {kpi.label}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Dashboard Sections */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-foreground flex items-center gap-2 text-base">
+              📊 Dashboard Sections
+            </h3>
+            <div className="space-y-3">
+              {[
+                {
+                  emoji: "🏠",
+                  num: "01",
+                  title: "Overview Dashboard",
+                  desc: "Overall business performance overview highlighting Revenue $9.71M, Profit $4.12M, and 12K orders.",
+                  insights: [
+                    "Strong revenue with controlled return rate",
+                    "Profit $4.12M across all product lines",
+                    "12K total orders processed",
+                    "2.14% return rate — well within targets",
+                  ],
+                },
+                {
+                  emoji: "👥",
+                  num: "02",
+                  title: "Customer Analysis",
+                  desc: "Customer behavior and segmentation with 17K total customers and avg revenue per customer of $1.431K.",
+                  insights: [
+                    "Income-level based order distribution",
+                    "Occupation-based purchasing trends",
+                    "Customer-level order tracking",
+                    "Average-income customers contribute highest orders",
+                  ],
+                },
+                {
+                  emoji: "🌍",
+                  num: "03",
+                  title: "Global Sales Analysis",
+                  desc: "Sales distribution visualized across countries covering North America, Europe, and Pacific regions.",
+                  insights: [
+                    "North America and Europe dominate sales",
+                    "Pacific region shows growth potential",
+                    "Regional filters for deep-dive analysis",
+                    "Country-level revenue breakdown",
+                  ],
+                },
+                {
+                  emoji: "🛍️",
+                  num: "04",
+                  title: "Product & Profit Analysis",
+                  desc: "Deep dive into product performance and profitability. Top Category: Accessories.",
+                  insights: [
+                    "Accessories generate highest order volume",
+                    "Profit trend shows strong upward trajectory",
+                    "Most ordered product type identified",
+                    "Category-level profitability comparison",
+                  ],
+                },
+              ].map((tab) => (
+                <div
+                  key={tab.num}
+                  className="rounded-xl border border-border/60 p-4"
+                  style={{ background: "oklch(0.12 0.03 255)" }}
+                >
+                  <div className="flex items-start gap-3">
+                    <span className="text-lg shrink-0">{tab.emoji}</span>
+                    <div className="flex-1 space-y-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-1 rounded-md shrink-0">
+                          {tab.num}
+                        </span>
+                        <p className="font-semibold text-foreground text-sm">
+                          {tab.title}
+                        </p>
+                      </div>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        {tab.desc}
+                      </p>
+                      <ul className="space-y-1 mt-2">
+                        {tab.insights.map((ins) => (
+                          <li
+                            key={ins}
+                            className="flex items-start gap-2 text-xs text-muted-foreground"
+                          >
+                            <span className="mt-1 w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
+                            {ins}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Objectives */}
+          <div
+            className="rounded-xl border border-border/60 p-5 space-y-3"
+            style={{ background: "oklch(0.12 0.03 255)" }}
+          >
+            <h3 className="font-semibold text-foreground flex items-center gap-2 text-base">
+              🎯 Objectives
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {[
+                "Analyze revenue and profit trends",
+                "Identify top-performing products",
+                "Understand customer segmentation",
+                "Track global sales performance",
+                "Provide actionable business insights",
+              ].map((obj) => (
+                <div
+                  key={obj}
+                  className="flex items-center gap-2 text-sm text-muted-foreground"
+                >
+                  <span className="w-4 h-4 rounded-full bg-primary/20 text-primary flex items-center justify-center text-xs font-bold shrink-0">
+                    ✓
+                  </span>
+                  {obj}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Key Insights */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-foreground flex items-center gap-2 text-base">
+              📈 Key Insights
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {[
+                { icon: "🔥", text: "Revenue reached $9.71M" },
+                { icon: "📦", text: "Accessories category leads sales" },
+                { icon: "🌍", text: "North America dominates revenue" },
+                {
+                  icon: "👥",
+                  text: "Average-income customers are key contributors",
+                },
+                { icon: "📈", text: "Profit shows strong upward trend" },
+              ].map((ins) => (
+                <div
+                  key={ins.text}
+                  className="rounded-xl border border-border/60 p-3 flex items-center gap-3"
+                  style={{ background: "oklch(0.12 0.03 255)" }}
+                >
+                  <span className="text-lg shrink-0">{ins.icon}</span>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {ins.text}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Charts Used */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-foreground flex items-center gap-2 text-base">
+              📊 Charts Used
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {[
+                { chart: "Line Charts", purpose: "Trend analysis" },
+                { chart: "Bar Charts", purpose: "Category comparison" },
+                { chart: "Donut Charts", purpose: "Distribution" },
+                { chart: "Map", purpose: "Geographic analysis" },
+                { chart: "Tables", purpose: "Detailed breakdown" },
+              ].map((c) => (
+                <div
+                  key={c.chart}
+                  className="rounded-xl border border-border/60 p-3 flex items-center gap-3"
+                  style={{ background: "oklch(0.12 0.03 255)" }}
+                >
+                  <span className="w-2 h-2 rounded-full bg-primary shrink-0" />
+                  <p className="text-sm text-foreground font-medium">
+                    {c.chart}
+                  </p>
+                  <span className="text-muted-foreground text-xs">
+                    → {c.purpose}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Tools */}
+          <div className="space-y-3">
+            <h3 className="font-semibold text-foreground flex items-center gap-2 text-base">
+              🛠 Tools & Technologies
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {[
+                "Power BI",
+                "DAX",
+                "Python",
+                "Pandas",
+                "Data Modeling",
+                "Data Visualization",
+                "Business Analytics",
+              ].map((t) => (
+                <Badge
+                  key={t}
+                  className="text-xs bg-primary/10 text-primary border-primary/20 border"
+                >
+                  {t}
+                </Badge>
+              ))}
+            </div>
+          </div>
+
+          {/* Business Value */}
+          <div
+            className="rounded-xl border border-primary/20 p-5 space-y-3"
+            style={{ background: "oklch(0.12 0.05 245)" }}
+          >
+            <h3 className="font-semibold text-foreground flex items-center gap-2 text-base">
+              💼 Business Value
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {[
+                "Helps businesses track sales & profit performance",
+                "Identifies top customers and products",
+                "Supports data-driven decision making",
+                "Improves market targeting strategies",
+              ].map((v) => (
+                <div
+                  key={v}
+                  className="flex items-center gap-2 text-sm text-muted-foreground"
+                >
+                  <span className="w-4 h-4 rounded-full bg-primary/20 text-primary flex items-center justify-center text-xs font-bold shrink-0">
+                    ✓
+                  </span>
+                  {v}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-3 pt-2">
+            <Button asChild className="flex-1">
+              <a
+                href="https://github.com/tushar123851/AdventureWorks_Sales_Dashboard-"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2"
+              >
+                <Github className="w-4 h-4" />
+                View on GitHub
+                <ExternalLink className="w-3 h-3 ml-auto" />
+              </a>
+            </Button>
+            <Button variant="outline" onClick={onClose} className="px-6">
+              Close
+            </Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 // ── Project Card ──────────────────────────────────────────────────────────────
 function ProjectCard({
   project,
   index,
   accent,
 }: {
-  project: (typeof EXCEL_PROJECTS)[0];
+  project: {
+    title: string;
+    description: string;
+    github: string;
+    tags: string[];
+    hasDetail?: boolean;
+    isCarSales?: boolean;
+    isAdventureWorks?: boolean;
+  };
   index: number;
   accent: "primary" | "teal" | "amber";
 }) {
+  const [modalOpen, setModalOpen] = useState(false);
+
   const topBorder = {
     primary: "card-top-primary",
     teal: "card-top-teal",
@@ -934,58 +2281,90 @@ function ProjectCard({
   };
 
   return (
-    <Card
-      data-ocid={`projects.item.${index}`}
-      className={`flex flex-col h-full border-border hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 group overflow-hidden ${topBorder[accent]}`}
-    >
-      <CardHeader>
-        <div className="flex items-start justify-between gap-2">
-          <CardTitle
-            className={`font-display text-xl transition-colors ${titleHover[accent]}`}
-          >
-            {project.title}
-          </CardTitle>
-          <div className={`p-2 rounded-lg shrink-0 ${iconBg[accent]}`}>
-            <BarChart3 className="w-5 h-5" />
-          </div>
-        </div>
-        <CardDescription className="text-base leading-relaxed">
-          {project.description}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="flex-1">
-        <div className="flex flex-wrap gap-2">
-          {project.tags.map((tag) => (
-            <Badge
-              key={tag}
-              variant="outline"
-              className="text-xs border-border text-muted-foreground"
+    <>
+      {project.hasDetail &&
+        !project.isCarSales &&
+        !project.isAdventureWorks && (
+          <SalesReportModal
+            open={modalOpen}
+            onClose={() => setModalOpen(false)}
+          />
+        )}
+      {project.isCarSales && (
+        <CarSalesDashboardModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+        />
+      )}
+      {project.isAdventureWorks && (
+        <AdventureWorksDashboardModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+        />
+      )}
+      <Card
+        data-ocid={`projects.item.${index}`}
+        className={`flex flex-col h-full border-border hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 group overflow-hidden ${topBorder[accent]}`}
+      >
+        <CardHeader>
+          <div className="flex items-start justify-between gap-2">
+            <CardTitle
+              className={`font-display text-xl transition-colors ${titleHover[accent]}`}
             >
-              {tag}
-            </Badge>
-          ))}
-        </div>
-      </CardContent>
-      <CardFooter>
-        <Button
-          data-ocid="projects.github.button"
-          asChild
-          className="w-full"
-          variant="outline"
-        >
-          <a
-            href={project.github}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2"
+              {project.title}
+            </CardTitle>
+            <div className={`p-2 rounded-lg shrink-0 ${iconBg[accent]}`}>
+              <BarChart3 className="w-5 h-5" />
+            </div>
+          </div>
+          <CardDescription className="text-base leading-relaxed">
+            {project.description}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex-1">
+          <div className="flex flex-wrap gap-2">
+            {project.tags.map((tag) => (
+              <Badge
+                key={tag}
+                variant="outline"
+                className="text-xs border-border text-muted-foreground"
+              >
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        </CardContent>
+        <CardFooter className="flex gap-2">
+          <Button
+            data-ocid="projects.github.button"
+            asChild
+            className="flex-1"
+            variant="outline"
           >
-            <Github className="w-4 h-4" />
-            View on GitHub
-            <ExternalLink className="w-3 h-3 ml-auto" />
-          </a>
-        </Button>
-      </CardFooter>
-    </Card>
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2"
+            >
+              <Github className="w-4 h-4" />
+              View on GitHub
+              <ExternalLink className="w-3 h-3 ml-auto" />
+            </a>
+          </Button>
+          {project.hasDetail && (
+            <Button
+              data-ocid="projects.detail.button"
+              className="flex-1"
+              onClick={() => setModalOpen(true)}
+            >
+              <Eye className="w-4 h-4 mr-2" />
+              View Project
+            </Button>
+          )}
+        </CardFooter>
+      </Card>
+    </>
   );
 }
 
