@@ -161,6 +161,8 @@ const POWERBI_PROJECTS = [
       "Power BI report analyzing Zomato restaurant sales data with insights into cuisine performance, city-wise trends, order patterns, and revenue metrics through interactive visualizations.",
     github: "https://github.com/tushar123851/Zomato_sales_analysis",
     tags: ["Power BI", "DAX", "Food Analytics", "Trends"],
+    hasDetail: true,
+    isZomato: true,
   },
 ];
 
@@ -2957,6 +2959,468 @@ function AdventureWorksDashboardModal({
   );
 }
 
+// ── Zomato Sales Analysis Detail Modal ───────────────────────────────────────
+function ZomatoDashboardModal({
+  open,
+  onClose,
+}: { open: boolean; onClose: () => void }) {
+  const githubBase =
+    "https://raw.githubusercontent.com/tushar123851/Zomato_sales_analysis/main/";
+  const images = [
+    {
+      src: `${githubBase}Screenshots_pages/main_dashboard.png`,
+      label: "Main Dashboard",
+    },
+    {
+      src: `${githubBase}Screenshots_pages/area_analysis.png`,
+      label: "Area Analysis",
+    },
+    {
+      src: `${githubBase}Screenshots_pages/user_analysis.png`,
+      label: "User Analysis",
+    },
+    { src: `${githubBase}zomato.gif`, label: "Dashboard Preview" },
+  ];
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if (!open) return;
+    const timer = setInterval(() => {
+      setCurrent((p) => (p + 1) % images.length);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, [open, images.length]);
+
+  return (
+    <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
+      <DialogContent className="max-w-6xl w-[98vw] h-[92vh] overflow-y-auto bg-background border-border p-0">
+        <div className="p-6 md:p-8">
+          {/* Header */}
+          <DialogHeader className="mb-6">
+            <DialogTitle className="text-2xl md:text-3xl font-display text-foreground flex items-center gap-3">
+              <span className="text-3xl">🍽️</span>
+              Zomato Data Analytics Dashboard
+            </DialogTitle>
+            <p className="text-muted-foreground mt-1">
+              Power BI dashboard analyzing food delivery performance, area
+              trends, and user insights.
+            </p>
+          </DialogHeader>
+
+          {/* Image Carousel */}
+          <div
+            className="relative rounded-xl overflow-hidden mb-8 bg-card border border-border"
+            style={{ height: "360px" }}
+          >
+            {images.map((img, i) => (
+              <div
+                key={img.label}
+                className="absolute inset-0 transition-opacity duration-700"
+                style={{ opacity: i === current ? 1 : 0 }}
+              >
+                <img
+                  src={img.src}
+                  alt={img.label}
+                  className="w-full h-full object-contain bg-zinc-900"
+                  onError={(e) => {
+                    const t = e.target as HTMLImageElement;
+                    t.style.display = "none";
+                    if (t.parentElement) {
+                      t.parentElement.innerHTML = `<div class="flex flex-col items-center justify-center h-full gap-3 text-muted-foreground"><span class="text-5xl">🍽️</span><span class="text-lg font-medium">${img.label}</span></div>`;
+                    }
+                  }}
+                />
+                <div className="absolute bottom-3 left-3 bg-black/60 text-white text-xs px-3 py-1 rounded-full">
+                  {img.label}
+                </div>
+              </div>
+            ))}
+            <div className="absolute bottom-3 right-3 flex gap-1.5">
+              {images.map((img, i) => (
+                <button
+                  type="button"
+                  key={img.label}
+                  onClick={() => setCurrent(i)}
+                  className={`w-2 h-2 rounded-full transition-all ${i === current ? "bg-white scale-125" : "bg-white/40"}`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* KPI Cards */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            {[
+              { icon: "💰", label: "Total Sales", value: "989M" },
+              { icon: "📦", label: "Total Orders", value: "150K" },
+              { icon: "⭐", label: "Ratings", value: "148K" },
+              { icon: "📊", label: "Quantity Sold", value: "2M" },
+            ].map((kpi) => (
+              <div
+                key={kpi.label}
+                className="bg-card border border-border rounded-xl p-4 text-center hover:border-primary/40 transition-colors"
+              >
+                <div className="text-2xl mb-1">{kpi.icon}</div>
+                <div className="text-xl font-bold text-primary">
+                  {kpi.value}
+                </div>
+                <div className="text-xs text-muted-foreground mt-0.5">
+                  {kpi.label}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Project Overview */}
+          <section className="mb-8">
+            <h3 className="text-xl font-semibold text-foreground mb-3 flex items-center gap-2">
+              <span>📌</span> Project Overview
+            </h3>
+            <p className="text-muted-foreground leading-relaxed">
+              This project presents a Zomato Data Analytics Dashboard built to
+              analyze food delivery data across multiple dimensions such as
+              Sales Performance, Area Analysis, User Insights, and Food Category
+              Trends. The dashboard provides actionable insights for business
+              decision-making using interactive visualizations in Power BI.
+            </p>
+          </section>
+
+          {/* Objectives */}
+          <section className="mb-8">
+            <h3 className="text-xl font-semibold text-foreground mb-3 flex items-center gap-2">
+              <span>🎯</span> Objectives
+            </h3>
+            <ul className="space-y-2 text-muted-foreground">
+              {[
+                "Analyze sales trends over time",
+                "Identify top-performing cities & locations",
+                "Understand customer behavior",
+                "Compare food category performance (Veg / Non-Veg / Others)",
+                "Evaluate user demographics",
+              ].map((obj) => (
+                <li key={obj} className="flex items-start gap-2">
+                  <span className="text-primary mt-0.5">✔</span> {obj}
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          {/* Dashboard Sections */}
+          <section className="mb-8">
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <span>📊</span> Dashboard Sections
+            </h3>
+            <div className="grid md:grid-cols-3 gap-4">
+              {[
+                {
+                  icon: "🔹",
+                  title: "Main Dashboard",
+                  overview:
+                    "Complete business performance snapshot — KPI cards, category insights, and trends.",
+                  highlights: [
+                    "💰 Sales: 989M",
+                    "🧾 Orders: 150K",
+                    "⭐ Ratings: 148K",
+                  ],
+                },
+                {
+                  icon: "🌍",
+                  title: "Area Analysis",
+                  overview: "Focuses on geographic and city-level performance.",
+                  highlights: [
+                    "🏆 Top City: Electronic City (Bangalore)",
+                    "📍 Strong metro performance",
+                  ],
+                },
+                {
+                  icon: "👤",
+                  title: "User Analysis",
+                  overview: "Analyzes user demographics and behavior.",
+                  highlights: [
+                    "👨 Male: 57%",
+                    "👩 Female: 43%",
+                    "🎯 Age Group: 22–26 dominant",
+                  ],
+                },
+              ].map((section) => (
+                <div
+                  key={section.title}
+                  className="bg-card border border-border rounded-xl p-5 hover:border-primary/40 transition-colors"
+                >
+                  <div className="text-2xl mb-2">{section.icon}</div>
+                  <h4 className="font-semibold text-foreground mb-2">
+                    {section.title}
+                  </h4>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    {section.overview}
+                  </p>
+                  <ul className="space-y-1">
+                    {section.highlights.map((h) => (
+                      <li key={h} className="text-xs text-primary font-medium">
+                        {h}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Top Cities */}
+          <section className="mb-8">
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <span>🏙️</span> Top Performing Cities
+            </h3>
+            <div className="grid grid-cols-3 gap-4">
+              {[
+                { medal: "🥇", city: "Tirupati" },
+                { medal: "🥈", city: "Bangalore" },
+                { medal: "🥉", city: "Pune" },
+              ].map((c) => (
+                <div
+                  key={c.city}
+                  className="bg-card border border-border rounded-xl p-4 text-center hover:border-primary/40 transition-colors"
+                >
+                  <div className="text-3xl mb-1">{c.medal}</div>
+                  <div className="font-semibold text-foreground">{c.city}</div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Category Performance */}
+          <section className="mb-8">
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <span>🍴</span> Category Performance
+            </h3>
+            <div className="grid md:grid-cols-3 gap-4">
+              {[
+                {
+                  icon: "🥗",
+                  category: "Veg",
+                  sales: "122M",
+                  ratings: "12K",
+                  best: true,
+                },
+                {
+                  icon: "🍗",
+                  category: "Non-Veg",
+                  sales: "106M",
+                  ratings: "11K",
+                  best: false,
+                },
+                {
+                  icon: "🍰",
+                  category: "Others",
+                  sales: "24M",
+                  ratings: "927",
+                  best: false,
+                },
+              ].map((cat) => (
+                <div
+                  key={cat.category}
+                  className={`bg-card border rounded-xl p-5 text-center transition-colors ${cat.best ? "border-primary/60 bg-primary/5" : "border-border hover:border-primary/30"}`}
+                >
+                  <div className="text-3xl mb-2">{cat.icon}</div>
+                  <div className="font-bold text-lg text-foreground">
+                    {cat.category}
+                  </div>
+                  {cat.best && (
+                    <div className="text-xs text-primary font-semibold mb-2">
+                      ⭐ Best Performer
+                    </div>
+                  )}
+                  <div className="text-sm text-muted-foreground">
+                    Sales:{" "}
+                    <span className="text-foreground font-medium">
+                      {cat.sales}
+                    </span>
+                  </div>
+                  <div className="text-sm text-muted-foreground">
+                    Ratings:{" "}
+                    <span className="text-foreground font-medium">
+                      {cat.ratings}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* User Insights */}
+          <section className="mb-8">
+            <h3 className="text-xl font-semibold text-foreground mb-4 flex items-center gap-2">
+              <span>👤</span> User Insights
+            </h3>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-card border border-border rounded-xl p-5">
+                <div className="grid grid-cols-3 gap-4 mb-4">
+                  {[
+                    { label: "Total Users", value: "100K", icon: "👥" },
+                    { label: "Female Users", value: "57.22%", icon: "👩" },
+                    { label: "Male Users", value: "42.78%", icon: "👨" },
+                  ].map((u) => (
+                    <div key={u.label} className="text-center">
+                      <div className="text-2xl">{u.icon}</div>
+                      <div className="font-bold text-primary text-lg">
+                        {u.value}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {u.label}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-sm text-muted-foreground italic">
+                  👉 Female users dominate the platform.
+                </p>
+              </div>
+              <div className="bg-card border border-border rounded-xl p-5">
+                <h4 className="font-semibold text-foreground mb-3">
+                  📈 Age Distribution
+                </h4>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Majority users fall between{" "}
+                  <span className="text-primary font-medium">20–25 years</span>.
+                  Younger audience is highly active.
+                </p>
+                <div className="space-y-2">
+                  {[
+                    { range: "20–22", pct: 85 },
+                    { range: "23–25", pct: 90 },
+                    { range: "26–30", pct: 60 },
+                    { range: "31+", pct: 30 },
+                  ].map((age) => (
+                    <div key={age.range} className="flex items-center gap-3">
+                      <span className="text-xs text-muted-foreground w-14">
+                        {age.range}
+                      </span>
+                      <div className="flex-1 bg-muted rounded-full h-2">
+                        <div
+                          className="bg-primary rounded-full h-2 transition-all duration-700"
+                          style={{ width: `${age.pct}%` }}
+                        />
+                      </div>
+                      <span className="text-xs text-primary w-8 text-right">
+                        {age.pct}%
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Yearly Trend */}
+          <section className="mb-8">
+            <h3 className="text-xl font-semibold text-foreground mb-3 flex items-center gap-2">
+              <span>📈</span> Yearly Sales Trend
+            </h3>
+            <div className="bg-card border border-border rounded-xl p-5">
+              <div className="flex items-end gap-3 h-28">
+                {[
+                  { year: "2017", height: 45 },
+                  { year: "2018", height: 100, peak: true },
+                  { year: "2019", height: 75 },
+                  { year: "2020", height: 40 },
+                ].map((y) => (
+                  <div
+                    key={y.year}
+                    className="flex flex-col items-center gap-1 flex-1"
+                  >
+                    <div
+                      className={`w-full rounded-t-md transition-all duration-500 ${y.peak ? "bg-primary" : "bg-primary/40"}`}
+                      style={{ height: `${y.height}%` }}
+                    />
+                    <span className="text-xs text-muted-foreground">
+                      {y.year}
+                    </span>
+                    {y.peak && (
+                      <span className="text-xs text-primary font-semibold">
+                        0.41bn
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+              <p className="text-sm text-muted-foreground mt-3 italic">
+                📈 Peak in 2018 (0.41bn) — Decline after 2019
+              </p>
+            </div>
+          </section>
+
+          {/* Business Recommendations */}
+          <section className="mb-8">
+            <h3 className="text-xl font-semibold text-foreground mb-3 flex items-center gap-2">
+              <span>🧠</span> Business Recommendations
+            </h3>
+            <div className="grid md:grid-cols-2 gap-3">
+              {[
+                "Focus marketing on top-performing cities",
+                "Improve performance in low-sales areas",
+                "Target young users (20–25 age group)",
+                "Expand Veg category offerings",
+                "Address post-2019 sales decline",
+              ].map((rec) => (
+                <div
+                  key={rec}
+                  className="bg-card border border-border rounded-lg p-4 flex items-start gap-3 hover:border-primary/40 transition-colors"
+                >
+                  <span className="text-primary text-lg">💡</span>
+                  <span className="text-sm text-muted-foreground">{rec}</span>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Tools */}
+          <section className="mb-8">
+            <h3 className="text-xl font-semibold text-foreground mb-3 flex items-center gap-2">
+              <span>🛠️</span> Tools & Technologies
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              {[
+                "Power BI",
+                "DAX",
+                "Data Cleaning",
+                "Data Transformation",
+                "Data Visualization",
+                "Business Intelligence",
+              ].map((tool) => (
+                <Badge
+                  key={tool}
+                  variant="outline"
+                  className="text-sm px-3 py-1 border-primary/30 text-primary"
+                >
+                  {tool}
+                </Badge>
+              ))}
+            </div>
+          </section>
+
+          {/* Footer Buttons */}
+          <div className="flex gap-3 pt-4 border-t border-border">
+            <Button asChild className="flex-1">
+              <a
+                href="https://github.com/tushar123851/Zomato_sales_analysis"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2"
+              >
+                <Github className="w-4 h-4" />
+                View on GitHub
+                <ExternalLink className="w-3 h-3 ml-auto" />
+              </a>
+            </Button>
+            <Button variant="outline" onClick={onClose} className="px-6">
+              Close
+            </Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 // ── Project Card ──────────────────────────────────────────────────────────────
 function ProjectCard({
   project,
@@ -2973,6 +3437,7 @@ function ProjectCard({
     isAdventureWorks?: boolean;
     isBrightSchool?: boolean;
     isVelora?: boolean;
+    isZomato?: boolean;
   };
   index: number;
   accent: "primary" | "teal" | "amber";
@@ -3029,6 +3494,12 @@ function ProjectCard({
       )}
       {project.isVelora && (
         <VeloraRetailsModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+        />
+      )}
+      {project.isZomato && (
+        <ZomatoDashboardModal
           open={modalOpen}
           onClose={() => setModalOpen(false)}
         />
