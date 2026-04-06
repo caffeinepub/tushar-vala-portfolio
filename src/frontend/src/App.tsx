@@ -2074,7 +2074,7 @@ function VeloraRetailsModal({
 }: { open: boolean; onClose: () => void }) {
   const images = [
     {
-      src: "https://raw.githubusercontent.com/tushar123851/velora_retails_analysis/main/dashboard.gif",
+      src: "https://raw.githubusercontent.com/tushar123851/velora_retails_analysis/main/Screenshots_pages/supermartretails.gif",
       label: "Dashboard Overview (Animated)",
       desc: "Full animated walkthrough of the Velora Retails Analysis Dashboard — Sales, Returns, and Customer insights.",
       fallbackIcon: "🎬",
