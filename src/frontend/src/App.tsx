@@ -2057,10 +2057,22 @@ function BrightFutureSchoolModal({
             </div>
           </div>
 
-          {/* Close Button */}
-          <div className="flex justify-end pt-2">
-            <Button onClick={onClose} variant="outline" className="gap-2">
-              <X className="w-4 h-4" /> Close
+          {/* CTA Buttons */}
+          <div className="flex gap-3 pt-2">
+            <Button asChild className="flex-1">
+              <a
+                href="https://github.com/tushar123851/Bright_future_school_analysis"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2"
+              >
+                <Github className="w-4 h-4" />
+                View on GitHub
+                <ExternalLink className="w-3 h-3 ml-auto" />
+              </a>
+            </Button>
+            <Button variant="outline" onClick={onClose} className="px-6">
+              Close
             </Button>
           </div>
         </div>
@@ -2454,6 +2466,9 @@ function VeloraRetailsModal({
                 View on GitHub
                 <ExternalLink className="w-3 h-3 ml-auto" />
               </a>
+            </Button>
+            <Button variant="outline" onClick={onClose} className="px-6">
+              Close
             </Button>
           </div>
         </div>
