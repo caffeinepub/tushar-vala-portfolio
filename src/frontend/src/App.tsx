@@ -125,6 +125,8 @@ const POWERBI_PROJECTS = [
       "Power BI dashboard analyzing school performance data including student results, attendance trends, subject-wise scores, and institutional KPIs to support data-driven education management.",
     github: "https://github.com/tushar123851/Bright_future_school_analysis",
     tags: ["Power BI", "Education Analytics", "DAX", "KPI"],
+    hasDetail: true,
+    isBrightSchool: true,
   },
   {
     title: "Velora Retails Analysis",
@@ -132,6 +134,8 @@ const POWERBI_PROJECTS = [
       "Power BI retail analytics dashboard providing insights into sales performance, product trends, customer behavior, and revenue metrics to drive smarter business decisions.",
     github: "https://github.com/tushar123851/velora_retails_analysis",
     tags: ["Power BI", "Retail Analytics", "DAX", "Sales"],
+    hasDetail: true,
+    isVelora: true,
   },
   {
     title: "Car Sales Dashboard",
@@ -1745,6 +1749,703 @@ function CarSalesDashboardModal({
   );
 }
 
+// ── Bright Future School Analytics Detail Modal ──────────────────────────────
+function BrightFutureSchoolModal({
+  open,
+  onClose,
+}: { open: boolean; onClose: () => void }) {
+  const images = [
+    {
+      src: "/assets/student_dashboard-019d6234-36d7-76cb-b4a9-515e52b4b6e7.gif",
+      label: "Student Dashboard Overview",
+      desc: "Comprehensive student performance & attendance analytics dashboard. Avg Score: 49.87%, Avg Attendance: 90.05%.",
+    },
+  ];
+  const [activeImg, setActiveImg] = useState(0);
+  useEffect(() => {
+    if (!open) return;
+    const t = setInterval(
+      () => setActiveImg((p) => (p + 1) % images.length),
+      3000,
+    );
+    return () => clearInterval(t);
+  }, [open]); // eslint-disable-line
+
+  return (
+    <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-card border-border">
+        <DialogHeader>
+          <DialogTitle className="font-display text-2xl text-primary flex items-center gap-2">
+            🎓 Bright Future School Analytics Dashboard
+          </DialogTitle>
+        </DialogHeader>
+        <div className="space-y-8">
+          {/* Image Carousel */}
+          <div className="relative rounded-xl overflow-hidden bg-background border border-border">
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={activeImg}
+                src={images[activeImg].src}
+                alt={images[activeImg].label}
+                className="w-full h-64 object-contain"
+                initial={{ opacity: 0, x: 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -40 }}
+                transition={{ duration: 0.5 }}
+                onError={(e) => {
+                  (e.target as HTMLImageElement).style.display = "none";
+                }}
+              />
+            </AnimatePresence>
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+              <p className="text-white font-semibold text-sm">
+                {images[activeImg].label}
+              </p>
+              <p className="text-white/70 text-xs mt-1">
+                {images[activeImg].desc}
+              </p>
+            </div>
+          </div>
+
+          {/* Project Overview */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-primary flex items-center gap-2">
+              📌 Project Overview
+            </h3>
+            <p className="text-muted-foreground leading-relaxed">
+              This project is a{" "}
+              <strong className="text-foreground">
+                Student Performance & Attendance Analytics Dashboard
+              </strong>{" "}
+              designed to analyze academic performance, attendance trends,
+              student demographics, subject-wise scores, and section & class
+              distribution. The dashboard provides{" "}
+              <strong className="text-foreground">
+                data-driven insights for schools
+              </strong>{" "}
+              to improve student outcomes and decision-making.
+            </p>
+          </div>
+
+          {/* KPI Cards */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { label: "Avg Score", value: "49.87%", icon: "📊" },
+              { label: "Avg Attendance", value: "90.05%", icon: "📅" },
+              { label: "Target Attendance", value: "95%", icon: "🎯" },
+              { label: "Total Students", value: "1000+", icon: "👥" },
+            ].map((kpi) => (
+              <div
+                key={kpi.label}
+                className="bg-primary/10 rounded-xl p-4 text-center border border-primary/20"
+              >
+                <div className="text-2xl mb-1">{kpi.icon}</div>
+                <div className="text-xl font-bold text-primary">
+                  {kpi.value}
+                </div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  {kpi.label}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Dashboard Sections */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-primary flex items-center gap-2">
+              📊 Dashboard Sections & Insights
+            </h3>
+            {[
+              {
+                icon: "📊",
+                title: "Academic Performance Analysis",
+                metrics:
+                  "Avg Score: 49.87% | Balanced performance across subjects",
+                insights: [
+                  "Math shows highest performance",
+                  "English and Science are consistent",
+                  "Slight improvement needed in History & Geography",
+                ],
+              },
+              {
+                icon: "📅",
+                title: "Attendance Performance",
+                metrics: "Avg Attendance: 90.05% | Target: 95%",
+                insights: [
+                  "Attendance is stable but below target",
+                  "Some fluctuations indicate irregular attendance periods",
+                ],
+              },
+              {
+                icon: "👥",
+                title: "Student Overview",
+                metrics:
+                  "Total Students: 22 / 1000 (dataset variation) | Nearly balanced gender distribution",
+                insights: [
+                  "Male students slightly higher than female",
+                  "Section distribution is evenly spread",
+                ],
+              },
+              {
+                icon: "📘",
+                title: "Detailed Student Performance",
+                metrics:
+                  "Individual student-level insights including scores, attendance %, and section details",
+                insights: [
+                  "High-performing students identified",
+                  "Attendance strongly correlates with performance",
+                ],
+              },
+            ].map((section) => (
+              <div
+                key={section.title}
+                className="bg-background rounded-xl p-5 border border-border"
+              >
+                <h4 className="font-semibold text-foreground flex items-center gap-2 mb-2">
+                  <span>{section.icon}</span> {section.title}
+                </h4>
+                <p className="text-sm text-muted-foreground mb-3">
+                  {section.metrics}
+                </p>
+                <ul className="space-y-1">
+                  {section.insights.map((ins) => (
+                    <li
+                      key={ins}
+                      className="text-sm text-muted-foreground flex items-start gap-2"
+                    >
+                      <span className="text-primary mt-0.5">💡</span> {ins}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          {/* Objectives */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-primary flex items-center gap-2">
+              🎯 Objectives
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              {[
+                "Analyze student academic performance",
+                "Track attendance trends",
+                "Identify high and low performers",
+                "Understand gender and section distribution",
+                "Improve decision-making for educators",
+              ].map((obj) => (
+                <div
+                  key={obj}
+                  className="flex items-center gap-2 text-sm text-muted-foreground"
+                >
+                  <span className="text-green-500">✔</span> {obj}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Key Insights */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-primary flex items-center gap-2">
+              📊 Key Insights
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {[
+                { icon: "📈", text: "Average score is around 50%" },
+                { icon: "📅", text: "Attendance is high but below target" },
+                { icon: "👥", text: "Gender distribution is balanced" },
+                { icon: "📊", text: "Subject performance is consistent" },
+                { icon: "🎯", text: "Attendance impacts academic performance" },
+              ].map((ins) => (
+                <div
+                  key={ins.text}
+                  className="flex items-start gap-2 text-sm text-muted-foreground bg-background rounded-lg p-3 border border-border"
+                >
+                  <span>{ins.icon}</span> {ins.text}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Design & UI */}
+          <div className="bg-background rounded-xl p-5 border border-border space-y-3">
+            <h3 className="text-lg font-semibold text-primary flex items-center gap-2">
+              🎨 Design & UI Highlights
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-muted-foreground">
+              <div>
+                <p className="font-semibold text-foreground mb-1">
+                  ✨ Visual Design
+                </p>
+                <ul className="space-y-1">
+                  <li>Clean academic theme</li>
+                  <li>Light background with structured layout</li>
+                  <li>Icon-based visuals</li>
+                </ul>
+              </div>
+              <div>
+                <p className="font-semibold text-foreground mb-1">
+                  🧩 Layout Features
+                </p>
+                <ul className="space-y-1">
+                  <li>Multi-dashboard structure</li>
+                  <li>KPI cards for quick insights</li>
+                  <li>Filters (Class, Section)</li>
+                </ul>
+              </div>
+              <div>
+                <p className="font-semibold text-foreground mb-1">
+                  📊 Charts Used
+                </p>
+                <ul className="space-y-1">
+                  <li>Bar charts → Subject analysis</li>
+                  <li>Line charts → Attendance trends</li>
+                  <li>Donut charts → Distribution</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {/* Tech Stack */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-primary flex items-center gap-2">
+              🛠️ Tech Stack
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {[
+                { tool: "Power BI 📊", purpose: "Dashboard Development" },
+                { tool: "Python 🐍", purpose: "Data Processing" },
+                { tool: "Pandas 📈", purpose: "Data Analysis" },
+                { tool: "DAX 📐", purpose: "Measures & KPIs" },
+              ].map((t) => (
+                <div
+                  key={t.tool}
+                  className="bg-primary/10 rounded-lg p-3 border border-primary/20 text-center"
+                >
+                  <p className="font-semibold text-foreground text-sm">
+                    {t.tool}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {t.purpose}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Business Value */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-primary flex items-center gap-2">
+              📈 Business / Educational Value
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              {[
+                "Helps schools improve student performance",
+                "Tracks attendance patterns",
+                "Identifies at-risk students",
+                "Supports data-driven teaching strategies",
+              ].map((v) => (
+                <div
+                  key={v}
+                  className="flex items-start gap-2 text-sm text-muted-foreground"
+                >
+                  <span className="text-primary">🏫</span> {v}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Close Button */}
+          <div className="flex justify-end pt-2">
+            <Button onClick={onClose} variant="outline" className="gap-2">
+              <X className="w-4 h-4" /> Close
+            </Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+// ── Velora Retails Analysis Detail Modal ─────────────────────────────────────
+function VeloraRetailsModal({
+  open,
+  onClose,
+}: { open: boolean; onClose: () => void }) {
+  const images = [
+    {
+      src: "https://raw.githubusercontent.com/tushar123851/velora_retails_analysis/main/sales_category.png",
+      label: "Sales & Category Analysis",
+      desc: "Net Sales: 309.99K | Total Orders: 397. Technology category leads orders with balanced distribution across categories.",
+      fallbackIcon: "🏠",
+    },
+    {
+      src: "https://raw.githubusercontent.com/tushar123851/velora_retails_analysis/main/customer_overview.png",
+      label: "Customer Overview & Returns",
+      desc: "Total Sales: 844.02K | Avg Sales per Customer: 4.26K. High-value customers drive majority revenue.",
+      fallbackIcon: "👥",
+    },
+    {
+      src: "https://raw.githubusercontent.com/tushar123851/velora_retails_analysis/main/return_analysis.png",
+      label: "Return Analysis Dashboard",
+      desc: "Total Returns: 50 | Return Rate (Orders): 5.00%. Late delivery is the top return reason.",
+      fallbackIcon: "🔁",
+    },
+  ];
+  const [activeImg, setActiveImg] = useState(0);
+  const [imgErrors, setImgErrors] = useState<Record<number, boolean>>({});
+
+  useEffect(() => {
+    if (!open) return;
+    const t = setInterval(
+      () => setActiveImg((p) => (p + 1) % images.length),
+      3000,
+    );
+    return () => clearInterval(t);
+  }, [open]); // eslint-disable-line
+
+  return (
+    <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-card border-border">
+        <DialogHeader>
+          <DialogTitle className="font-display text-2xl text-primary flex items-center gap-2">
+            🛒 SuperMart Retail Sales & Return Dashboard
+          </DialogTitle>
+        </DialogHeader>
+        <div className="space-y-8">
+          {/* Image Carousel */}
+          <div className="relative rounded-xl overflow-hidden bg-background border border-border min-h-[220px]">
+            <AnimatePresence mode="wait">
+              {imgErrors[activeImg] ? (
+                <motion.div
+                  key={`fallback-${activeImg}`}
+                  className="w-full h-64 flex flex-col items-center justify-center bg-gradient-to-br from-primary/10 to-accent/10"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <div className="text-6xl mb-3">
+                    {images[activeImg].fallbackIcon}
+                  </div>
+                  <p className="text-foreground font-semibold text-base">
+                    {images[activeImg].label}
+                  </p>
+                </motion.div>
+              ) : (
+                <motion.img
+                  key={activeImg}
+                  src={images[activeImg].src}
+                  alt={images[activeImg].label}
+                  className="w-full h-64 object-contain"
+                  initial={{ opacity: 0, x: 40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -40 }}
+                  transition={{ duration: 0.5 }}
+                  onError={() =>
+                    setImgErrors((prev) => ({ ...prev, [activeImg]: true }))
+                  }
+                />
+              )}
+            </AnimatePresence>
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+              <p className="text-white font-semibold text-sm">
+                {images[activeImg].label}
+              </p>
+              <p className="text-white/70 text-xs mt-1">
+                {images[activeImg].desc}
+              </p>
+            </div>
+            {/* Carousel dots */}
+            <div className="absolute top-3 right-3 flex gap-1.5">
+              {images.map((img, i) => (
+                <button
+                  type="button"
+                  key={img.label}
+                  onClick={() => setActiveImg(i)}
+                  className={`w-2 h-2 rounded-full transition-all ${i === activeImg ? "bg-primary scale-125" : "bg-white/40"}`}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* Project Overview */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-primary flex items-center gap-2">
+              📌 Project Overview
+            </h3>
+            <p className="text-muted-foreground leading-relaxed">
+              This project is a{" "}
+              <strong className="text-foreground">
+                Retail Sales & Return Analysis Dashboard
+              </strong>{" "}
+              designed to analyze sales performance, order trends, return
+              analysis, customer insights, and regional distribution. The
+              dashboard is built with a{" "}
+              <strong className="text-foreground">modern dark UI theme</strong>{" "}
+              and focuses on delivering actionable business insights.
+            </p>
+          </div>
+
+          {/* KPI Cards */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            {[
+              { label: "Net Sales", value: "309.99K", icon: "💰" },
+              { label: "Total Orders", value: "397", icon: "📦" },
+              { label: "Total Sales", value: "844.02K", icon: "💰" },
+              { label: "Avg Sales/Customer", value: "4.26K", icon: "📊" },
+              { label: "Total Returns", value: "50", icon: "🔁" },
+              { label: "Return Rate", value: "5.00%", icon: "📉" },
+            ].map((kpi) => (
+              <div
+                key={kpi.label}
+                className="bg-primary/10 rounded-xl p-4 text-center border border-primary/20"
+              >
+                <div className="text-2xl mb-1">{kpi.icon}</div>
+                <div className="text-xl font-bold text-primary">
+                  {kpi.value}
+                </div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  {kpi.label}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Dashboard Sections */}
+          <div className="space-y-6">
+            <h3 className="text-lg font-semibold text-primary">
+              📊 Dashboard Sections
+            </h3>
+
+            {/* Sales & Category */}
+            <div className="bg-background rounded-xl p-5 border border-border space-y-3">
+              <h4 className="font-semibold text-foreground flex items-center gap-2">
+                🏠 Sales & Category Analysis
+              </h4>
+              <p className="text-sm text-muted-foreground">
+                Overview of sales and order distribution with key metrics.
+                Technology category leads orders with balanced distribution
+                across categories. Regional contribution varies significantly.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-2">
+                {[
+                  "Technology category leads orders",
+                  "Balanced distribution across categories",
+                  "Regional contribution varies significantly",
+                ].map((ins) => (
+                  <div
+                    key={ins}
+                    className="bg-primary/5 rounded-lg p-3 text-xs text-muted-foreground border border-primary/10"
+                  >
+                    💡 {ins}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Customer Overview */}
+            <div className="bg-background rounded-xl p-5 border border-border space-y-3">
+              <h4 className="font-semibold text-foreground flex items-center gap-2">
+                👥 Customer Overview & Returns
+              </h4>
+              <p className="text-sm text-muted-foreground">
+                Customer-level performance and return tracking with Total Sales
+                of 844.02K and Avg Sales per Customer of 4.26K.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
+                {[
+                  "High-value customers drive majority revenue",
+                  "Return contribution varies by customer",
+                ].map((ins) => (
+                  <div
+                    key={ins}
+                    className="bg-primary/5 rounded-lg p-3 text-xs text-muted-foreground border border-primary/10"
+                  >
+                    💡 {ins}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Return Analysis */}
+            <div className="bg-background rounded-xl p-5 border border-border space-y-3">
+              <h4 className="font-semibold text-foreground flex items-center gap-2">
+                🔁 Return Analysis Dashboard
+              </h4>
+              <p className="text-sm text-muted-foreground">
+                Deep analysis of product returns and reasons. Total Returns: 50
+                | Return Rate (Orders): 5.00%. Late delivery is the top return
+                reason.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-2">
+                {[
+                  "Late delivery is the top return reason",
+                  "Return rate decreasing over time",
+                  "Customer issues impact returns significantly",
+                ].map((ins) => (
+                  <div
+                    key={ins}
+                    className="bg-primary/5 rounded-lg p-3 text-xs text-muted-foreground border border-primary/10"
+                  >
+                    💡 {ins}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Objectives */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-primary flex items-center gap-2">
+              🎯 Objectives
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {[
+                "Analyze sales and return patterns",
+                "Identify top-performing categories",
+                "Understand customer contribution",
+                "Track return reasons and trends",
+                "Improve business decision-making",
+              ].map((obj) => (
+                <div
+                  key={obj}
+                  className="flex items-start gap-2 bg-background rounded-lg p-3 border border-border"
+                >
+                  <span className="text-primary mt-0.5">✔</span>
+                  <span className="text-sm text-muted-foreground">{obj}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Key Insights */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-primary flex items-center gap-2">
+              📊 Key Insights
+            </h3>
+            <div className="space-y-2">
+              {[
+                { icon: "🔥", text: "Technology category leads sales" },
+                { icon: "📉", text: "Return rates show declining trend" },
+                { icon: "👥", text: "High-value customers drive revenue" },
+                { icon: "📦", text: "Orders are consistently distributed" },
+                { icon: "⚠️", text: "Late delivery is the main return issue" },
+              ].map((insight) => (
+                <div
+                  key={insight.text}
+                  className="flex items-center gap-3 bg-background rounded-lg p-3 border border-border"
+                >
+                  <span className="text-xl">{insight.icon}</span>
+                  <span className="text-sm text-muted-foreground">
+                    {insight.text}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Design Highlights */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-background rounded-xl p-5 border border-border space-y-3">
+              <h4 className="font-semibold text-foreground">
+                ✨ Visual Design
+              </h4>
+              <ul className="space-y-1 text-sm text-muted-foreground">
+                <li>• Dark purple gradient theme</li>
+                <li>• Glowing KPI cards</li>
+                <li>• Clean typography</li>
+              </ul>
+            </div>
+            <div className="bg-background rounded-xl p-5 border border-border space-y-3">
+              <h4 className="font-semibold text-foreground">
+                🧩 Layout Features
+              </h4>
+              <ul className="space-y-1 text-sm text-muted-foreground">
+                <li>• Multi-panel dashboard</li>
+                <li>• Interactive filters</li>
+                <li>• Balanced visual hierarchy</li>
+              </ul>
+            </div>
+            <div className="bg-background rounded-xl p-5 border border-border space-y-3">
+              <h4 className="font-semibold text-foreground">📊 Charts Used</h4>
+              <ul className="space-y-1 text-sm text-muted-foreground">
+                <li>• Line charts → Sales trends</li>
+                <li>• Donut charts → Category dist.</li>
+                <li>• Bar charts → Return reasons</li>
+                <li>• Tables → Customer data</li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Tech Stack */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-primary">🛠️ Tech Stack</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {[
+                { tool: "Power BI 📊", purpose: "Dashboard Development" },
+                { tool: "Python 🐍", purpose: "Data Preparation" },
+                { tool: "Pandas 📈", purpose: "Data Analysis" },
+                { tool: "DAX 📐", purpose: "Measures & KPIs" },
+              ].map((t) => (
+                <div
+                  key={t.tool}
+                  className="bg-primary/10 rounded-xl p-4 border border-primary/20 text-center"
+                >
+                  <div className="font-semibold text-primary text-sm">
+                    {t.tool}
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-1">
+                    {t.purpose}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Business Value */}
+          <div className="space-y-3">
+            <h3 className="text-lg font-semibold text-primary">
+              📈 Business Value
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {[
+                "Helps reduce return rates",
+                "Identifies high-performing categories",
+                "Improves customer targeting",
+                "Supports data-driven decisions",
+              ].map((v) => (
+                <div
+                  key={v}
+                  className="flex items-start gap-2 bg-background rounded-lg p-3 border border-border"
+                >
+                  <span className="text-yellow-400 mt-0.5">★</span>
+                  <span className="text-sm text-muted-foreground">{v}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* CTA */}
+          <div className="flex gap-3 pt-2">
+            <Button asChild className="flex-1">
+              <a
+                href="https://github.com/tushar123851/velora_retails_analysis"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2"
+              >
+                <Github className="w-4 h-4" />
+                View on GitHub
+                <ExternalLink className="w-3 h-3 ml-auto" />
+              </a>
+            </Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 // ── AdventureWorks Sales Dashboard Detail Modal ──────────────────────────────
 function AdventureWorksDashboardModal({
   open,
@@ -2256,6 +2957,8 @@ function ProjectCard({
     hasDetail?: boolean;
     isCarSales?: boolean;
     isAdventureWorks?: boolean;
+    isBrightSchool?: boolean;
+    isVelora?: boolean;
   };
   index: number;
   accent: "primary" | "teal" | "amber";
@@ -2284,7 +2987,9 @@ function ProjectCard({
     <>
       {project.hasDetail &&
         !project.isCarSales &&
-        !project.isAdventureWorks && (
+        !project.isAdventureWorks &&
+        !project.isBrightSchool &&
+        !project.isVelora && (
           <SalesReportModal
             open={modalOpen}
             onClose={() => setModalOpen(false)}
@@ -2298,6 +3003,18 @@ function ProjectCard({
       )}
       {project.isAdventureWorks && (
         <AdventureWorksDashboardModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+        />
+      )}
+      {project.isBrightSchool && (
+        <BrightFutureSchoolModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+        />
+      )}
+      {project.isVelora && (
+        <VeloraRetailsModal
           open={modalOpen}
           onClose={() => setModalOpen(false)}
         />
