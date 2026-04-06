@@ -2074,6 +2074,13 @@ function VeloraRetailsModal({
 }: { open: boolean; onClose: () => void }) {
   const images = [
     {
+      src: "https://raw.githubusercontent.com/tushar123851/velora_retails_analysis/main/dashboard.gif",
+      label: "Dashboard Overview (Animated)",
+      desc: "Full animated walkthrough of the Velora Retails Analysis Dashboard — Sales, Returns, and Customer insights.",
+      fallbackIcon: "🎬",
+      isGif: true,
+    },
+    {
       src: "https://raw.githubusercontent.com/tushar123851/velora_retails_analysis/main/sales_category.png",
       label: "Sales & Category Analysis",
       desc: "Net Sales: 309.99K | Total Orders: 397. Technology category leads orders with balanced distribution across categories.",
@@ -2097,19 +2104,20 @@ function VeloraRetailsModal({
 
   useEffect(() => {
     if (!open) return;
-    const t = setInterval(
+    const delay = images[activeImg]?.isGif ? 6000 : 3000;
+    const t = setTimeout(
       () => setActiveImg((p) => (p + 1) % images.length),
-      3000,
+      delay,
     );
-    return () => clearInterval(t);
-  }, [open]); // eslint-disable-line
+    return () => clearTimeout(t);
+  }, [open, activeImg]); // eslint-disable-line
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-card border-border">
         <DialogHeader>
           <DialogTitle className="font-display text-2xl text-primary flex items-center gap-2">
-            🛒 SuperMart Retail Sales & Return Dashboard
+            🛒 Velora Retails Analysis Dashboard
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-8">
@@ -2155,6 +2163,12 @@ function VeloraRetailsModal({
                 {images[activeImg].desc}
               </p>
             </div>
+            {/* GIF badge */}
+            {images[activeImg]?.isGif && !imgErrors[activeImg] && (
+              <div className="absolute top-3 left-3 bg-primary text-primary-foreground text-xs font-bold px-2 py-0.5 rounded-full animate-pulse">
+                GIF
+              </div>
+            )}
             {/* Carousel dots */}
             <div className="absolute top-3 right-3 flex gap-1.5">
               {images.map((img, i) => (
