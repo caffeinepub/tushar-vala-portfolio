@@ -130,7 +130,7 @@ const POWERBI_PROJECTS = [
     title: "Velora Retails Analysis",
     description:
       "Power BI retail analytics dashboard providing insights into sales performance, product trends, customer behavior, and revenue metrics to drive smarter business decisions.",
-    github: "https://github.com/tushar123851/velora_retails_analys",
+    github: "https://github.com/tushar123851/velora_retails_analysis",
     tags: ["Power BI", "Retail Analytics", "DAX", "Sales"],
   },
   {
