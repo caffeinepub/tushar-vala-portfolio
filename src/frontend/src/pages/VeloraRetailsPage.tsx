@@ -4,7 +4,6 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { BarChart3, ExternalLink, Github } from "lucide-react";
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
-import { ImageCarousel } from "./SalesReportPage";
 
 function ProjectPageHeader({
   title,
@@ -128,30 +127,6 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 }
 
 export default function VeloraRetailsPage() {
-  const images = [
-    {
-      src: "https://raw.githubusercontent.com/tushar123851/velora_retails_analysis/main/Screenshots_pages/supermartretails.gif",
-      label: "Dashboard Overview (Animated)",
-      desc: "Full animated walkthrough — Sales, Returns, and Customer insights.",
-      isGif: true,
-    },
-    {
-      src: "https://raw.githubusercontent.com/tushar123851/velora_retails_analysis/main/sales_category.png",
-      label: "Sales & Category Analysis",
-      desc: "Net Sales: 309.99K | Total Orders: 397. Technology category leads.",
-    },
-    {
-      src: "https://raw.githubusercontent.com/tushar123851/velora_retails_analysis/main/customer_overview.png",
-      label: "Customer Overview & Returns",
-      desc: "Total Sales: 844.02K | Avg Sales per Customer: 4.26K.",
-    },
-    {
-      src: "https://raw.githubusercontent.com/tushar123851/velora_retails_analysis/main/return_analysis.png",
-      label: "Return Analysis Dashboard",
-      desc: "Total Returns: 50 | Return Rate (Orders): 5.00%.",
-    },
-  ];
-
   return (
     <div
       className="min-h-screen"
@@ -287,18 +262,6 @@ export default function VeloraRetailsPage() {
             </div>
           </div>
         </motion.section>
-
-        {/* Carousel — additional screenshots */}
-        <section>
-          <SectionTitle>📸 Dashboard Screenshots</SectionTitle>
-          <ImageCarousel
-            images={images.filter(
-              (img) =>
-                !img.src.endsWith(".gif") &&
-                !img.src.includes("supermartretails"),
-            )}
-          />
-        </section>
 
         {/* Overview */}
         <section>
