@@ -1,0 +1,12 @@
+// Version: 1.0.0
+type Message__19119041 = {content : Text; email : Text; name : Text};
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+actor {
+  stable messages :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Message__19119041]];
+      var elementIndex : Nat__490723111
+    }
+};

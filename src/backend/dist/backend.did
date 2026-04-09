@@ -1,0 +1,10 @@
+type Message = 
+ record {
+   content: text;
+   email: text;
+   name: text;
+ };
+service : {
+  getAllMessages: (owner: principal) -> (vec Message) query;
+  submitMessage: (name: text, email: text, content: text) -> ();
+}
